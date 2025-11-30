@@ -23,14 +23,19 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        // to prevent a hydration error in React Navigation v6. 
+        headerShown: useClientOnlyValue(false, false), //second one hides tab bar(bar at top of each tab) on expo demo?
       }}>
+
+
+
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home page?',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+
+          //this header right thing is hidden because top tab bar hidden
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -45,15 +50,30 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+
         }}
       />
+
+
+
+
       <Tabs.Screen
         name="two"
         options={{
           title: 'Tab Two',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
+        
       />
+      
+      <Tabs.Screen
+        name="three" //needs to match file name
+        options={{
+          title: 'text on bottom tab bar', // text displayed on tab bar
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />, // icon at the bottom
+        }}
+      />
+
     </Tabs>
   );
 }
