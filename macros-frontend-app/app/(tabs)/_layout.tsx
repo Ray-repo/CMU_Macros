@@ -27,12 +27,19 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, false), //second one hides tab bar(bar at top of each tab) on expo demo?
       }}>
 
-
+      <Tabs.Screen
+        name="two"
+        options={{
+          title: 'Tab Two',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+        
+      />
 
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home page?',
+          title: 'Home page',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
 
           //this header right thing is hidden because top tab bar hidden
@@ -54,17 +61,6 @@ export default function TabLayout() {
         }}
       />
 
-
-
-
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-        
-      />
       
       <Tabs.Screen
         name="three" //needs to match file name
