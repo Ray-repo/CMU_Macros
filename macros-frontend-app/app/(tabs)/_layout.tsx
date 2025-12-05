@@ -65,7 +65,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="three" //needs to match file name
         options={{
-          title: 'text on bottom tab bar', // text displayed on tab bar
+          title: 'Tab Three', // text displayed on tab bar top/bottom
           tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />, // icon at the bottom
         }}
       />
