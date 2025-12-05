@@ -9,12 +9,12 @@ export default function TabOneScreen() {
   return (
     <View style={styles.container}>
 
-      <View style={styles.frame}>
+      {/*<View style={styles.frame}>
         <View style={styles.group}>
 
 
           <View style={styles.div}>
-            {/* Convert <img> to <Image> and src to uri */}
+            {/* Convert <img> to <Image> and src to uri 
             <Image
                 style={styles.ellipse}
                 alt="Ellipse"
@@ -37,7 +37,8 @@ export default function TabOneScreen() {
                 alt="Vector"
                 source={{ uri: "https://c.animaapp.com/7FlCCH6I/img/vector-1.svg" }}
             />
-            {/* Convert text divs to <Text> */}
+            {/* Convert text divs to <Text> 
+
             <Text style={styles.textWrapper}>carbs</Text>
             <Text style={styles.textWrapper2}>proteins</Text>
             <Text style={styles.textWrapper3}>fats</Text>
@@ -55,6 +56,121 @@ export default function TabOneScreen() {
             <Text style={styles.textWrapper7}>recommended next meal</Text>
           </View>
 
+        </View>
+      </View>
+      */}
+
+
+
+
+      {/* FRAME (Main Container) */}
+      <View style={styles.frame}>
+        
+        <View style={styles.rectangle} />
+
+        <View style={styles.div} />
+
+        <View style={styles.group}>
+          <View style={styles.rectangle2} />
+
+          {/* GROUP-2 (Meal 1) */}
+          <View style={styles.group2}>
+            <View style={styles.rectangle3} />
+            <View style={styles.rectangle4} />
+            <View style={styles.rectangle5} />
+            
+            <View style={styles.group3}>
+              <View style={styles.rectangle6} />
+              <View style={styles.rectangle7} />
+              <View style={styles.rectangle8} />
+              <Text style={styles.textWrapper}>Food name</Text>
+              <Text style={styles.textWrapper2}>Count</Text>
+            </View>
+
+            <View style={styles.group4}>
+              <View style={styles.rectangle9} />
+              <View style={styles.rectangle10} />
+            </View>
+            <Text style={styles.textWrapper3}>Breakfast</Text>
+          </View>
+
+          {/* GROUP-5 (Meal 2) */}
+          <View style={styles.group5}>
+            <View style={styles.rectangle11} />
+            <View style={styles.rectangle12} />
+            <Text style={styles.textWrapper4}>Lunch</Text>
+            <View style={styles.rectangle13} />
+          </View>
+
+          {/* GROUP-6 (Meal 3) */}
+          <View style={styles.group6}>
+            <View style={styles.rectangle11} /> {/* Reusing style */}
+            <View style={styles.rectangle12} /> {/* Reusing style */}
+            <Text style={styles.textWrapper4}>Lunch</Text> {/* Reusing style */}
+            <View style={styles.rectangle14} />
+          </View>
+        </View>
+
+        <View style={styles.rectangle15} />
+        <View style={styles.rectangle16} />
+
+        {/* GROUP-WRAPPER (Chart Section) */}
+        <View style={styles.groupWrapper}>
+          <View style={styles.group7}>
+            <View style={styles.group8}>
+              {/* Ellipse SVGs - Will need react-native-svg or conversion to <View> */}
+              <Image style={styles.ellipse} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-1.svg" }} />
+              <Image style={styles.img} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-8.svg" }} />
+              <Image style={styles.ellipse2} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-2.svg" }} />
+              <Image style={styles.ellipse3} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-7.svg" }} />
+              <Image style={styles.ellipse4} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-3.svg" }} />
+              <Image style={styles.ellipse5} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-6.svg" }} />
+
+              <View style={styles.ellipse6} />
+              <View style={styles.ellipse7} />
+              
+              <Text style={styles.textWrapper5}>carbs</Text>
+              <Text style={styles.textWrapper6}>proteins</Text>
+              <Text style={styles.textWrapper7}>fats</Text>
+              <Text style={styles.textWrapper8}>20/55 g</Text>
+              <Text style={styles.textWrapper9}>80/120 g</Text>
+              <Text style={styles.textWrapper10}>154/310 g</Text>
+            </View>
+
+            {/* GROUP-9 (Recommended Next Meal) */}
+            <View style={styles.group9}>
+              <View style={styles.rectangle17} />
+              <View style={styles.rectangle18} />
+              <View style={styles.rectangle19} />
+              <View style={styles.rectangle20} />
+              <View style={styles.rectangle21} />
+              <Text style={styles.textWrapper11}>reccomended next meal</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.rectangle22} />
+        
+        <Text style={styles.textWrapper12}>Notifs/Announce</Text>
+        <Text style={styles.textWrapper13}>Sat, Oct 4</Text>
+
+        <View style={styles.rectangle23} />
+        <View style={styles.rectangle24} />
+        
+        <Text style={styles.textWrapper14}>My Plan</Text>
+        <Text style={styles.textWrapper15}>7:00 am</Text>
+        <Text style={styles.textWrapper16}>7:00 pm</Text>
+        <Text style={styles.textWrapper17}>Edit</Text>
+
+        {/* Group 10 is an image (.png) */}
+        <Image style={styles.group10} alt="Group" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/group-11@2x.png" }} />
+
+        {/* GROUP-11 (KCAL display) */}
+        <View style={styles.group11}>
+          <Text style={styles.textWrapper18}>600</Text>
+          <View style={styles.rectangle25} />
+          <Text style={styles.textWrapper19}>1750</Text>
+          <Text style={styles.textWrapper20}>kcal</Text>
         </View>
       </View>
 
