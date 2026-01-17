@@ -5,6 +5,13 @@
 import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 import { variabless } from '@/constants/indextabvars';
 
+import Ellipse1 from "../../assets/images/ellipse-1.svg";
+import Ellipse2 from "../../assets/images/ellipse-2.svg";
+import Ellipse3 from "../../assets/images/ellipse-3.svg";
+import Ellipse6 from "../../assets/images/ellipse-6.svg"; //yellow
+import Ellipse7 from "../../assets/images/ellipse-7.svg"; //blue
+import Ellipse8 from "../../assets/images/ellipse-8.svg"; //green
+
 
 export default function TabOneScreen() {
   const date = new Date();
@@ -68,27 +75,42 @@ export default function TabOneScreen() {
         <View style={styles.rectangle16} />
 
         {/* GROUP-WRAPPER main group */}
-        <View style={styles.groupWrapper}>
-          <View style={styles.group7}>
+        <View style={styles.mainGroup}>
+          <View style={styles.mainGroupBG}>
+            <View style={styles.planRow}>
+              <Text style={styles.planText}>My Plan</Text>
+              <Text style={styles.editText}>Edit</Text>
+            </View>
             
             <View style={styles.group8}>
-              {/* Ellipse SVGs - Will need react-native-svg or conversion to <View> */}
-              <Image style={styles.ellipse} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-1.svg" }} />
-              <Image style={styles.img} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-8.svg" }} />
-              <Image style={styles.ellipse2} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-2.svg" }} />
-              <Image style={styles.ellipse3} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-7.svg" }} />
-              <Image style={styles.ellipse4} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-3.svg" }} />
-              <Image style={styles.ellipse5} alt="Ellipse" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/ellipse-6.svg" }} />
+              <View style={styles.ellipse1Container}>
+                <Ellipse1 width={183} height={342} />
+              </View>
+              <View style={styles.ellipse2Container}>
+                <Ellipse2 width={155} height={286} />
+              </View>
+              <View style={styles.ellipse3Container}>
+                <Ellipse3 width={126} height={227} />
+              </View>
+              <View style={styles.ellipse6Container}>
+                <Ellipse6 width={107} height={72} />
+              </View>
+              <View style={styles.ellipse7Container}>
+                <Ellipse7 width={147} height={173} />
+              </View>
+              <View style={styles.ellipse8Container}>
+                <Ellipse8 width={172} height={146} />
+              </View>
 
-              <View style={styles.ellipse6} />
-              <View style={styles.ellipse7} />
+              <View style={styles.kcalBackground} />
+              <View style={styles.randomassdotontheright} />
               
-              <Text style={styles.textWrapper5}>carbs</Text>
-              <Text style={styles.textWrapper6}>proteins</Text>
-              <Text style={styles.textWrapper7}>fats</Text>
-              <Text style={styles.textWrapper8}>20/55 g</Text>
-              <Text style={styles.textWrapper9}>80/120 g</Text>
-              <Text style={styles.textWrapper10}>154/310 g</Text>
+              <Text style={styles.carbsText}>carbs</Text>
+              <Text style={styles.proteinsText}>proteins</Text>
+              <Text style={styles.fatsText}>fats</Text>
+              <Text style={styles.carbsGramsText}>20/55 g</Text>
+              <Text style={styles.proteinsGramsText}>80/120 g</Text>
+              <Text style={styles.fatsGramsText}>154/310 g</Text>
             </View>
             
             {/* GROUP-9 (Recommended Next Meal) */}
@@ -98,7 +120,7 @@ export default function TabOneScreen() {
               <View style={styles.rectangle19} />
               <View style={styles.rectangle20} />
               <View style={styles.rectangle21} />
-              <Text style={styles.textWrapper11}>reccomended next meal</Text>
+              <Text style={styles.textWrapper11}>recommended next meal</Text>
             </View>
           </View>
         </View>
@@ -109,10 +131,8 @@ export default function TabOneScreen() {
         <Text style={styles.announcements}>Notifs/Announce</Text>
         <Text style={styles.date}>{dateformat}</Text>
 
-        <Text style={styles.planText}>My Plan</Text>
         <Text style={styles.amText}>7:00 am</Text>
         <Text style={styles.pmText}>7:00 pm</Text>
-        <Text style={styles.editText}>Edit</Text>
 
         <View style={styles.rectangle23} />
         <View style={styles.rectangle24} />
@@ -565,7 +585,7 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .group-wrapper main group
-  groupWrapper: {
+  mainGroup: {
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 16,
@@ -588,104 +608,104 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .group-7
-  //my plan/edit group
-  group7: {
+  mainGroupBG: {
     alignItems: 'center',
     backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
     borderRadius: 16,
-    
+
     
     // display: flex and flex-direction: column are standard for View
     flexDirection: 'column',
     
-    gap: 90, // RN supports the gap property
+    gap: 0, // removed gap between next meal group n giant group, added marginbottom to giant group instead
     height: 582,
     width: 408,
   },
+
+  planRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between', // planText left, editText right
+  alignItems: 'center',            // vertical alignment
+  width: '100%',                   // span the whole group7 width
+  paddingHorizontal: 16,           // optional, spacing from edges
+},
+
+planText: {
+  color: '#ffffff',
+  fontFamily: 'Lekton',
+  fontSize: 20,
+  fontWeight: '700',
+  lineHeight: 24,
+  textAlign: 'left',
+  marginTop: 20,
+},
+
+editText: {
+  color: '#e74900',
+  fontFamily: 'Lekton',
+  fontSize: 16,
+  fontWeight: '400',
+  lineHeight: 16,
+  textAlign: 'right',
+  textDecorationLine: 'underline',
+  marginTop: 20,
+},
 
   // CSS: .frame .group-8
   group8: {
     height: 334,
     marginLeft: 10,
-    marginTop: 66,
+    marginTop: 22,      //fat
+    marginBottom: 90,   //guess
     position: 'relative',
     width: 346,
   },
 
-  // CSS: .frame .ellipse
-  ellipse: {
-    height: 342,
-    // Converting left: calc(50.00% - 177px)
-    left: '50%',
-    transform: [{ translateX: -177 }],
+  ellipse1Container: {
     position: 'absolute',
     top: 0,
-    width: 183,
-    // NOTE: If this was an SVG image, it needs <SvgUri> or a <View> with borderRadius
+    left: '50%',
+    transform: [{ translateX: -177 }], 
   },
 
-  // CSS: .frame .img
-  img: {
-    height: 146,
-    // Converting left: calc(50.00% - 170px)
-    left: '50%',
-    transform: [{ translateX: -170 }],
-    position: 'absolute',
-    top: 188,
-    width: 172,
-    // NOTE: If this was an SVG image, it needs <SvgUri> or a <View> with borderRadius
-  },
-
-  // CSS: .frame .ellipse-2
-  ellipse2: {
-    height: 286,
-    // Converting left: calc(50.00% - 149px)
-    left: '50%',
-    transform: [{ translateX: -149 }],
+  ellipse2Container: {
     position: 'absolute',
     top: 28,
-    width: 155,
-    // NOTE: If this was an SVG image, it needs <SvgUri> or a <View> with borderRadius
+    left: '50%',
+    transform: [{ translateX: -149 }], 
   },
 
-  // CSS: .frame .ellipse-3
-  ellipse3: {
-    height: 173,
-    // Converting left: calc(50.00% - 145px)
-    left: '50%',
-    transform: [{ translateX: -145 }],
-    position: 'absolute',
-    top: 132,
-    width: 147,
-    // NOTE: Add borderRadius property if this is a coded shape, not an image
-  },
-
-  // CSS: .frame .ellipse-4
-  ellipse4: {
-    height: 227,
-    // Converting left: calc(50.00% - 120px)
-    left: '50%',
-    transform: [{ translateX: -120 }],
+  ellipse3Container: {
     position: 'absolute',
     top: 57,
-    width: 126,
-    // NOTE: Add borderRadius property if this is a coded shape, not an image
+    left: '50%',
+    transform: [{ translateX: -120 }], 
   },
 
-  // CSS: .frame .ellipse-5
-  ellipse5: {
-    height: 72,
-    // Converting left: calc(50.00% - 105px)
-    left: '50%',
-    transform: [{ translateX: -105 }],
+  ellipse6Container: {
     position: 'absolute',
     top: 204,
-    width: 107,
-    // NOTE: Add borderRadius property if this is a coded shape, not an image
+    left: '50%',
+    transform: [{ translateX: -105 }], 
   },
 
+  ellipse7Container: {
+    position: 'absolute',
+    top: 132,
+    left: '50%',
+    transform: [{ translateX: -145 }], 
+  },
+
+  ellipse8Container: {
+    position: 'absolute',
+    top: 188,
+    left: '50%',
+    transform: [{ translateX: -170 }], 
+  },
+
+
   // CSS: .frame .ellipse-6 (Gradient converted to solid fallback)
-  ellipse6: {
+  kcalBackground: {
     // Fallback for linear-gradient: rgba(255, 255, 255, 0.12)
     backgroundColor: 'rgba(255, 255, 255, 0.12)',
     borderWidth: 2,
@@ -706,7 +726,7 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .ellipse-7
-  ellipse7: {
+  randomassdotontheright: {
     backgroundColor: '#ffffff',
     // Rounding '32.88px' to 33
     borderRadius: 33, 
@@ -719,47 +739,44 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .text-wrapper-5
-  textWrapper5: {
+  carbsText: {
     alignItems: 'center',
     color: '#ffffff',
     // fontFamily 'Lekton' must be loaded
     fontFamily: 'Lekton', 
     fontSize: 12,
     fontWeight: '700',
-    height: 12,
     justifyContent: 'center',
     left: 181,
     letterSpacing: 0,
-    lineHeight: 12, 
+    lineHeight: 15, 
     position: 'absolute',
-    top: 58,
+    top: 55,
     // white-space: nowrap is omitted
   },
 
   // CSS: .frame .text-wrapper-6
-  textWrapper6: {
+  proteinsText: {
     alignItems: 'center',
     color: '#ffffff',
     fontFamily: 'Lekton',
     fontSize: 12,
     fontWeight: '700',
-    height: 12,
     justifyContent: 'center',
     left: 181,
     letterSpacing: 0,
-    lineHeight: 12,
+    lineHeight: 15,
     position: 'absolute',
-    top: 29,
+    top: 26,
   },
 
   // CSS: .frame .text-wrapper-7
-  textWrapper7: {
+  fatsText: {
     alignItems: 'center',
     color: '#ffffff',
     fontFamily: 'Lekton',
     fontSize: 12,
     fontWeight: '700',
-    height: 12,
     justifyContent: 'center',
     left: 181,
     letterSpacing: 0,
@@ -769,54 +786,51 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .text-wrapper-8
-  textWrapper8: {
+  carbsGramsText: {
     alignItems: 'center',
     color: '#ffffff',
     fontFamily: 'Lekton',
     fontSize: 12,
     fontWeight: '400',
-    height: 12,
     justifyContent: 'center',
     left: 181,
     letterSpacing: 0,
-    lineHeight: 12,
+    lineHeight: 15,
     opacity: 0.4,
     position: 'absolute',
-    top: 262,
+    top: 260,
   },
 
   // CSS: .frame .text-wrapper-9
-  textWrapper9: {
+  proteinsGramsText: {
     alignItems: 'center',
     color: '#ffffff',
     fontFamily: 'Lekton',
     fontSize: 12,
     fontWeight: '400',
-    height: 12,
     justifyContent: 'center',
     left: 181,
     letterSpacing: 0,
-    lineHeight: 12,
+    lineHeight: 15,
     opacity: 0.4,
     position: 'absolute',
-    top: 292,
+    top: 290,
   },
 
   // CSS: .frame .text-wrapper-10
-  textWrapper10: {
+  fatsGramsText: {
     alignItems: 'center',
     color: '#ffffff',
     fontFamily: 'Lekton',
     fontSize: 12,
     fontWeight: '400',
-    height: 12,
     justifyContent: 'center',
     left: 181,
     letterSpacing: 0,
-    lineHeight: 12,
+    lineHeight: 15,
     opacity: 0.4,
     position: 'absolute',
-    top: 322,
+    top: 320,
   },
 
   // CSS: .frame .group-9 (Recommended Next Meal Container)
@@ -960,7 +974,7 @@ const styles = StyleSheet.create({
     lineHeight: 12,
     position: 'absolute',
     textAlign: 'center',
-    top: 53,
+    top: '6%', //guess
     width: 226,
   },
 
@@ -986,7 +1000,7 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .text-wrapper-14
-  planText: {
+  /*planText: {
     alignItems: 'center',
     color: '#ffffff',
     fontFamily: 'Lekton',
@@ -999,7 +1013,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     position: 'absolute',
     top: 219,
-  },
+  },*/
 
   // CSS: .frame .text-wrapper-15
   amText: {
@@ -1010,7 +1024,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     height: 15,
     justifyContent: 'center',
-    left: 41,
+    left: '11%', //guess
     letterSpacing: 0,
     lineHeight: 12,
     opacity: 0.4,
@@ -1027,7 +1041,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     height: 15,
     justifyContent: 'center',
-    left: 353,
+    left: '76.5%', //guess
     letterSpacing: 0,
     lineHeight: 12,
     opacity: 0.4,
@@ -1036,7 +1050,7 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .text-wrapper-17
-  editText: {
+  /*editText: {
     alignItems: 'center',
     color: '#e74900',
     fontFamily: 'Lekton',
@@ -1051,7 +1065,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     textDecorationLine: 'underline', // CSS text-decoration: underline
     top: 221,
-  },
+  },*/
 
   // CSS: .frame .group-10
   group10: {
