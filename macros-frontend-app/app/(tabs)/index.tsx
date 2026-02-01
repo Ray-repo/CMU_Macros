@@ -2,8 +2,9 @@
 //import { Text, View } from '@/components/Themed';
 //import EditScreenInfo from '@/components/EditScreenInfo';
 
-import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import { variabless } from '@/constants/indextabvars';
+import { useRouter } from 'expo-router';
 
 import Ellipse1 from "../../assets/images/ellipse-1.svg";
 import Ellipse2 from "../../assets/images/ellipse-2.svg";
@@ -11,16 +12,21 @@ import Ellipse3 from "../../assets/images/ellipse-3.svg";
 import Ellipse6 from "../../assets/images/ellipse-6.svg"; //yellow
 import Ellipse7 from "../../assets/images/ellipse-7.svg"; //blue
 import Ellipse8 from "../../assets/images/ellipse-8.svg"; //green
+import Menuicon from "../../assets/images/Menu.svg";
+import Rightarrow from "../../assets/images/Chevron right.svg";
+import Leftarrow from "../../assets/images/Chevron left.svg";
 
 
 export default function TabOneScreen() {
   const date = new Date();
+  const router = useRouter();
 
   const dateformat = date.toLocaleDateString('en-US', {
   weekday: 'short',
   month: 'short',
   day: 'numeric',
   });
+
   return (
     <ScrollView> 
     <View style={styles.container}>
@@ -30,7 +36,7 @@ export default function TabOneScreen() {
         <View style={styles.rectangle} />
         <View style={styles.div} />
 
-          <View style={styles.group}>
+          <View style={styles.meals}>
             <View style={styles.rectangle2} />
 
             {/* GROUP-2 (Meal 1) */}
@@ -54,32 +60,28 @@ export default function TabOneScreen() {
             <Text style={styles.textWrapper3}>Breakfast</Text>
           </View>
 
-          {/* GROUP-5 (Meal 2) */}
-          <View style={styles.group5}>
+          {/* GROUP-5 (Meal 2) this thing is like very slightly off center maybe*/}
+          <View style={styles.meal2}>
             <View style={styles.rectangle11} />
             <View style={styles.rectangle12} />
             <Text style={styles.textWrapper4}>Lunch</Text>
             <View style={styles.rectangle13} />
           </View>
-
-          {/* GROUP-6 (Meal 3) */}
-          <View style={styles.group6}>
-            <View style={styles.rectangle11} /> {/* Reusing style */}
-            <View style={styles.rectangle12} /> {/* Reusing style */}
-            <Text style={styles.textWrapper4}>Lunch</Text> {/* Reusing style */}
-            <View style={styles.rectangle14} />
-          </View>
         </View>
-
-        <View style={styles.rectangle15} />
-        <View style={styles.rectangle16} />
+        
+        <View style={styles.rectangle15}/>
+        <View style={styles.rectangle16} >
+            <Menuicon width={48} height={48} />
+        </View>
 
         {/* GROUP-WRAPPER main group */}
         <View style={styles.mainGroup}>
           <View style={styles.mainGroupBG}>
             <View style={styles.planRow}>
               <Text style={styles.planText}>My Plan</Text>
-              <Text style={styles.editText}>Edit</Text>
+              <TouchableOpacity onPress={() => router.push('/three')}>
+                <Text style={styles.editText}>Edit</Text>
+              </TouchableOpacity>
             </View>
             
             <View style={styles.group8}>
@@ -123,9 +125,7 @@ export default function TabOneScreen() {
               <Text style={styles.textWrapper11}>recommended next meal</Text>
             </View>
           </View>
-        </View>
-
-        <View style={styles.rectangle22} />
+        </View>        
         
         
         <Text style={styles.announcements}>Notifs/Announce</Text>
@@ -134,8 +134,12 @@ export default function TabOneScreen() {
         <Text style={styles.amText}>7:00 am</Text>
         <Text style={styles.pmText}>7:00 pm</Text>
 
-        <View style={styles.rectangle23} />
-        <View style={styles.rectangle24} />
+        <View style={styles.rectangle23} >
+            <Rightarrow/>
+        </View>
+        <View style={styles.rectangle24} >
+            <Leftarrow/>
+        </View>
         
 
         {/* Group 10 is an image (.png) */}
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
   },
   frame: {
     backgroundColor: variabless.VariableCollectionDark, // Placeholder for var(--variable-collection-dark)
-    minHeight: 1076,
+    minHeight: 1176,
     minWidth: 440,
     overflow: 'hidden',
     position: 'relative', // Necessary for absolute children
@@ -194,6 +198,7 @@ const styles = StyleSheet.create({
 
   // CSS: .frame .div
   //OFFCENTER??????
+  //top background change later
   div: {
     backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
     height: 126,
@@ -205,7 +210,7 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .group
-  group: {
+  meals: {
     height: 360,
     // Converting left: calc(50.00% - 204px)
     left: '50%',
@@ -467,7 +472,7 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .group-5
-  group5: {
+  meal2: {
     height: 66,
     // Converting left: calc(50.00% - 172px)
     left: '50%',
@@ -575,7 +580,7 @@ const styles = StyleSheet.create({
 
   // CSS: .frame .rectangle-16
   rectangle16: {
-    backgroundColor: '#e74900',
+    //backgroundColor: '#e74900',
     borderRadius: 30,
     height: 46,
     position: 'absolute',
@@ -929,6 +934,7 @@ editText: {
   },
 
   // CSS: .frame .rectangle-22 (Bottom Navigation/Bar)
+  /*<View style={styles.rectangle22} />
   rectangle22: {
     backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
     bottom: 0,
@@ -936,7 +942,7 @@ editText: {
     left: 1,
     position: 'absolute',
     width: 440,
-  },
+  },*/
 
   // CSS: .frame .text-wrapper-12
   announcements: {
@@ -980,7 +986,7 @@ editText: {
 
   // CSS: .frame .rectangle-23
   rectangle23: {
-    backgroundColor: '#afafaf',
+    //backgroundColor: '#afafaf',
     height: 29,
     position: 'absolute',
     top: 60,
@@ -991,7 +997,7 @@ editText: {
 
   // CSS: .frame .rectangle-24
   rectangle24: {
-    backgroundColor: '#afafaf',
+    //backgroundColor: '#afafaf',
     height: 29,
     position: 'absolute',
     top: 60,
