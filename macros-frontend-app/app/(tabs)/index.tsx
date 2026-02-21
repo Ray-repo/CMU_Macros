@@ -32,7 +32,7 @@ export default function TabOneScreen() {
     <View style={styles.container}>
       {/* FRAME (Main Container) */}
       <View style={styles.frame}>
-        
+        <View style={{ margin: 12, flex: 1 }}>
         <View style={styles.rectangle} />
         <View style={styles.div} />
 
@@ -152,7 +152,7 @@ export default function TabOneScreen() {
           <Text style={styles.kcalGoal}>1750</Text>
           <Text style={styles.kcalText}>kcal</Text>
         </View>
-      
+      </View>
       </View>
     </View>
     </ScrollView>
@@ -187,13 +187,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     
     height: 59,
-    // Converting left: calc(50.00% - 204px)
-    left: '50%',
-    transform: [{ translateX: -204 }],
-    
     position: 'absolute',
     top: 131,
-    width: 408,
+    width: '100%',
   },
 
   // CSS: .frame .div
@@ -213,12 +209,12 @@ const styles = StyleSheet.create({
   meals: {
     height: 360,
     // Converting left: calc(50.00% - 204px)
-    left: '50%',
-    transform: [{ translateX: -204 }],
+    //left: '50%',
+    //transform: [{ translateX: -204 }],
     
     position: 'absolute',
     top: 791,
-    width: 408,
+    width: '100%',
   },
 
   // CSS: .frame .rectangle-2
@@ -229,12 +225,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     height: 337,
     // Converting left: calc(50.00% - 204px)
-    left: '50%',
-    transform: [{ translateX: -204 }],
+    //left: '50%',
+    //transform: [{ translateX: -204 }],
     
     position: 'absolute',
     top: 0,
-    width: 408,
+    width: '100%',
   },
 
   // CSS: .frame .group-2
@@ -603,13 +599,13 @@ const styles = StyleSheet.create({
     // display: flex is default, justifyContent centers the content
     justifyContent: 'center',
     height: 582,
-    left: '50%',
-    transform: [{ translateX: -204 }],
+    //left: '50%',
+    //transform: [{ translateX: -204 }],
     //left: 16, //HI HELLO HI
     overflow: 'hidden',
     position: 'absolute',
     top: 199,
-    width: 408,
+    width: '100%',
   },
 
   // CSS: .frame .group-7
@@ -624,7 +620,7 @@ const styles = StyleSheet.create({
     
     gap: 0, // removed gap between next meal group n giant group, added marginbottom to giant group instead
     height: 582,
-    width: 408,
+    width: '100%',
   },
 
   planRow: {
