@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   frame: {
-    backgroundColor: variabless.VariableCollectionDark, // Placeholder for var(--variable-collection-dark)
+    backgroundColor: variabless.VariableCollectionDark, 
     minHeight: 1176,
     minWidth: 440,
     overflow: 'hidden',
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 
   // CSS: .frame .rectangle
   rectangle: {
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
+    backgroundColor: variabless.VariableCollectionMedium, 
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 16,
@@ -193,50 +193,36 @@ const styles = StyleSheet.create({
   },
 
   // CSS: .frame .div
-  //OFFCENTER??????
-  //top background change later
+  //top background 
   div: {
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
+    backgroundColor: variabless.VariableCollectionMedium, 
     height: 126,
-    
     left: 0,
     position: 'absolute',
     top: -20,
     width: '100%',
   },
 
-  // CSS: .frame .group
   meals: {
-    height: 360,
-    // Converting left: calc(50.00% - 204px)
-    //left: '50%',
-    //transform: [{ translateX: -204 }],
-    
+    height: 360,    
     position: 'absolute',
     top: 791,
     width: '100%',
   },
 
-  // CSS: .frame .rectangle-2
   rectangle2: {
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
+    backgroundColor: variabless.VariableCollectionMedium, 
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 16,
     height: 337,
-    // Converting left: calc(50.00% - 204px)
-    //left: '50%',
-    //transform: [{ translateX: -204 }],
-    
     position: 'absolute',
     top: 0,
     width: '100%',
   },
 
-  // CSS: .frame .group-2
   group2: {
     height: 197,
-    // Converting left: calc(50.00% - 170px)
     left: '50%',
     transform: [{ translateX: -170 }],
 
@@ -245,14 +231,12 @@ const styles = StyleSheet.create({
     width: 342,
   },
 
-  // CSS: .frame .rectangle-3
   rectangle3: {
     backgroundColor: '#bdbdbd',
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 12,
     height: 197,
-    // Converting left: calc(50.00% - 171px)
     left: '50%',
     transform: [{ translateX: -171 }],
     
@@ -261,7 +245,6 @@ const styles = StyleSheet.create({
     width: 340,
   },
 
-  // CSS: .frame .rectangle-4
   rectangle4: {
     backgroundColor: '#afafaf',
     borderWidth: 1,
@@ -269,7 +252,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     bottom: 10,
     height: 8,
-    // Converting left: calc(50.00% - 163px)
     left: '50%',
     transform: [{ translateX: -163 }],
     
@@ -277,7 +259,6 @@ const styles = StyleSheet.create({
     width: 325,
   },
 
-  // CSS: .frame .rectangle-5
   rectangle5: {
     backgroundColor: '#afafaf',
     borderWidth: 1,
@@ -290,10 +271,8 @@ const styles = StyleSheet.create({
     width: 34,
   },
 
-  // CSS: .frame .group-3
   group3: {
     height: 38,
-    // Converting left and top calc()
     left: '50%',
     top: '50%',
     transform: [
@@ -304,14 +283,12 @@ const styles = StyleSheet.create({
     width: 330,
   },
 
-  // CSS: .frame .rectangle-6
   rectangle6: {
     backgroundColor: '#afafaf',
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 8,
     height: 38,
-    // Converting left and top calc()
     left: '50%',
     top: '50%',
     transform: [
@@ -322,14 +299,12 @@ const styles = StyleSheet.create({
     width: 326,
   },
 
-  // CSS: .frame .rectangle-7
   rectangle7: {
     backgroundColor: '#bdbdbd',
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 30,
     height: 26,
-    // Converting left and top calc()
     left: '50%',
     top: '50%',
     transform: [
@@ -340,14 +315,12 @@ const styles = StyleSheet.create({
     width: 25,
   },
 
-  // CSS: .frame .rectangle-8
   rectangle8: {
     backgroundColor: '#bdbdbd',
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 30,
     height: 26,
-    // Converting left and top calc()
     left: '50%',
     top: '50%',
     transform: [
@@ -467,10 +440,9 @@ const styles = StyleSheet.create({
     width: 92,
   },
 
-  // CSS: .frame .group-5
+  //meal 2
   meal2: {
     height: 66,
-    // Converting left: calc(50.00% - 172px)
     left: '50%',
     transform: [{ translateX: -172 }],
     position: 'absolute',
@@ -478,7 +450,6 @@ const styles = StyleSheet.create({
     width: 342,
   },
 
-  // CSS: .frame .rectangle-11
   rectangle11: {
     backgroundColor: '#bdbdbd',
     borderWidth: 1,
@@ -542,7 +513,6 @@ const styles = StyleSheet.create({
   // CSS: .frame .group-6
   group6: {
     height: 66,
-    // Converting left: calc(50.00% - 170px)
     left: '50%',
     transform: [{ translateX: -170 }],
     position: 'absolute',
@@ -571,10 +541,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50,
     width: 46,
-    left: '80.7%',//guessed slightly off 
+    left: '80.7%', //guessed slightly off 
   },
 
-  // CSS: .frame .rectangle-16
   rectangle16: {
     //backgroundColor: '#e74900',
     borderRadius: 30,
@@ -585,7 +554,6 @@ const styles = StyleSheet.create({
     left: '8.86%',//math
   },
 
-  // CSS: .frame .group-wrapper main group
   mainGroup: {
     borderWidth: 1,
     borderColor: '#ffffff1f',
@@ -599,9 +567,6 @@ const styles = StyleSheet.create({
     // display: flex is default, justifyContent centers the content
     justifyContent: 'center',
     height: 582,
-    //left: '50%',
-    //transform: [{ translateX: -204 }],
-    //left: 16, //HI HELLO HI
     overflow: 'hidden',
     position: 'absolute',
     top: 199,
@@ -834,7 +799,7 @@ editText: {
     top: 320,
   },
 
-  // CSS: .frame .group-9 (Recommended Next Meal Container)
+  //next meal group
   nextMealGroup: {
     height: 60,
     marginLeft: 32,
@@ -842,12 +807,11 @@ editText: {
     width: 380,
   },
 
-  // CSS: .frame .rectangle-17 (Main background of Group 9)
+  //background of next meal group?
   rectangle17: {
     backgroundColor: '#2d2d2d',
     borderRadius: 12,
     height: 60,
-    // Converting left: calc(50.00% - 190px)
     left: '50%',
     transform: [{ translateX: -190 }],
     position: 'absolute',
@@ -855,7 +819,7 @@ editText: {
     width: 348,
   },
 
-  // CSS: .frame .rectangle-18 (Right end tab of Group 9)
+  // CSS: .frame .rectangle-18 (Right end tab of Group 9) <- next meal group??
   rectangle18: {
     backgroundColor: '#2d2d2d',
     // RN individual border radii
@@ -929,18 +893,7 @@ editText: {
     width: 199,
   },
 
-  // CSS: .frame .rectangle-22 (Bottom Navigation/Bar)
-  /*<View style={styles.rectangle22} />
-  rectangle22: {
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
-    bottom: 0,
-    height: 83,
-    left: 1,
-    position: 'absolute',
-    width: 440,
-  },*/
-
-  // CSS: .frame .text-wrapper-12
+  //announcements
   announcements: {
     alignItems: 'center',
     color: '#ffffff',
@@ -960,7 +913,7 @@ editText: {
     width: 416,
   },
 
-  // CSS: .frame .text-wrapper-13
+  // date
   date: {
     alignItems: 'center',
     color: '#ffffff',
@@ -1001,23 +954,8 @@ editText: {
     left: '36.36%', //160 / 160 + 260
   },
 
-  // CSS: .frame .text-wrapper-14
-  /*planText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Lekton',
-    fontSize: 20,
-    fontWeight: '700',
-    height: 20,
-    justifyContent: 'center',
-    left: 34,
-    letterSpacing: 0,
-    lineHeight: 20,
-    position: 'absolute',
-    top: 219,
-  },*/
 
-  // CSS: .frame .text-wrapper-15
+  //am 
   amText: {
     alignItems: 'center',
     color: '#ffffff',
@@ -1034,7 +972,7 @@ editText: {
     top: 662,
   },
 
-  // CSS: .frame .text-wrapper-16
+  //pm text
   pmText: {
     alignItems: 'center',
     color: '#ffffff',
@@ -1051,24 +989,6 @@ editText: {
     top: 662,
   },
 
-  // CSS: .frame .text-wrapper-17
-  /*editText: {
-    alignItems: 'center',
-    color: '#e74900',
-    fontFamily: 'Lekton',
-    fontSize: 16,
-    fontWeight: '400',
-    height: 16,
-    justifyContent: 'center',
-    left: 375,
-    letterSpacing: 0,
-    lineHeight: 16,
-    position: 'absolute',
-    textAlign: 'right',
-    textDecorationLine: 'underline', // CSS text-decoration: underline
-    top: 221,
-  },*/
-
   // CSS: .frame .group-10
   group10: {
     height: 28,
@@ -1080,7 +1000,7 @@ editText: {
     width: 348,
   },
 
-  // CSS: .frame .group-11
+  //kcal group
   kcalGroup: {
     // RN default display is flex, but we explicitly set direction
     flexDirection: 'column', 
@@ -1091,7 +1011,7 @@ editText: {
     width: 160,
   },
 
-  // CSS: .frame .text-wrapper-18
+  //kcal current
   kcalCurrent: {
     alignItems: 'center',
     color: '#ffffff',
@@ -1109,7 +1029,6 @@ editText: {
     // unless this <Text> is wrapped in a <View>, but keeping the style properties as is.
   },
 
-  // CSS: .frame .rectangle-25
   kcalDivider: {
     backgroundColor: '#ffffff',
     height: 2,
@@ -1118,7 +1037,6 @@ editText: {
     width: 109,
   },
 
-  // CSS: .frame .text-wrapper-19
   kcalGoal: {
     alignItems: 'center',
     color: '#ffffff',
@@ -1134,7 +1052,6 @@ editText: {
     width: 84,
   },
 
-  // CSS: .frame .text-wrapper-20
   kcalText: {
     alignItems: 'center',
     color: '#ffffff',
