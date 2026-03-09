@@ -1,5 +1,5 @@
 export const variabless = {
-    "BodyFontFamily": "\"Lekton\", Helvetica",
+  "BodyFontFamily": "\"Lekton\", Helvetica",
   "BodyFontSize": 14,
   "BodyFontStyle": "normal",
   "BodyFontWeight": 400,
