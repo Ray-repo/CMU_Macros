@@ -16,6 +16,9 @@ import Menuicon from "../../assets/images/Menu.svg";
 import Rightarrow from "../../assets/images/Chevron right.svg";
 import Leftarrow from "../../assets/images/Chevron left.svg";
 
+import { Dimensions } from 'react-native';
+const screenWidth = Dimensions.get('window').width;
+
 
 export default function TabOneScreen() {
   const date = new Date();
@@ -32,10 +35,10 @@ export default function TabOneScreen() {
     <View style={styles.container}>
       {/* FRAME (Main Container) */}
       <View style={styles.frame}>
-        <View style={{ margin: 12, flex: 1 }}>
-        <View style={styles.rectangle} />
-        <View style={styles.div} />
+        <View style={styles.topbackground} />
 
+        <View style={{ margin: 12, flex: 1 }}>
+          <View style={styles.rectangle} />
           <View style={styles.meals}>
             <View style={styles.rectangle2} />
 
@@ -162,13 +165,13 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
   frame: {
+    flex: 1,
     backgroundColor: variabless.VariableCollectionDark, 
     minHeight: 1176,
-    minWidth: 440,
+    //minWidth: 440,?
     overflow: 'hidden',
     position: 'relative', // Necessary for absolute children
     width: '100%',
@@ -192,15 +195,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  // CSS: .frame .div
+  //og named div
   //top background 
-  div: {
+  topbackground: {
     backgroundColor: variabless.VariableCollectionMedium, 
     height: 126,
-    left: 0,
     position: 'absolute',
-    top: -20,
-    width: '100%',
+    width: screenWidth,
   },
 
   meals: {
