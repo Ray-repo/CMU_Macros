@@ -64,10 +64,10 @@ export default function TabLayout() {
 
       
       <Tabs.Screen
-        name="three" //needs to match file name
+        name="editfoodpage" //needs to match file name
         options={{
-          title: 'Tab Three', // text displayed on tab bar top/bottom
-          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />, // icon at the bottom
+          title: 'Edit food', // text displayed on tab bar top/bottom
+          tabBarIcon: ({ color }) => <TabBarIcon name="edit" color={color} />, // icon at the bottom
         }}
       />
 

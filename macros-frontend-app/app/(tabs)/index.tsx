@@ -82,7 +82,7 @@ export default function TabOneScreen() {
           <View style={styles.mainGroupBG}>
             <View style={styles.planRow}>
               <Text style={styles.planText}>My Plan</Text>
-              <TouchableOpacity onPress={() => router.push('/three')}>
+              <TouchableOpacity onPress={() => router.push('/editfoodpage')}>
                 <Text style={styles.editText}>Edit</Text>
               </TouchableOpacity>
             </View>
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
   meal2: {
     height: 66,
     left: '50%',
-    transform: [{ translateX: -172 }],
+    transform: [{ translateX: -170 }],
     position: 'absolute',
     top: 219,
     width: 342,
