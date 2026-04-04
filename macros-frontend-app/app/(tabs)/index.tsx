@@ -1,571 +1,296 @@
-//import { StyleSheet } from 'react-native';
-//import { Text, View } from '@/components/Themed';
-//import EditScreenInfo from '@/components/EditScreenInfo';
-
-import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { variabless } from '@/constants/indextabvars';
 import { useRouter } from 'expo-router';
-
-import Ellipse1 from "../../assets/images/ellipse-1.svg";
-import Ellipse2 from "../../assets/images/ellipse-2.svg";
-import Ellipse3 from "../../assets/images/ellipse-3.svg";
-import Ellipse6 from "../../assets/images/ellipse-6.svg"; //yellow
-import Ellipse7 from "../../assets/images/ellipse-7.svg"; //blue
-import Ellipse8 from "../../assets/images/ellipse-8.svg"; //green
+import { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
+import Svg, { Circle } from 'react-native-svg';
+import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing } from 'react-native-reanimated';
 import Menuicon from "../../assets/images/Menu.svg";
 import Rightarrow from "../../assets/images/Chevron right.svg";
 import Leftarrow from "../../assets/images/Chevron left.svg";
-
 import { Dimensions } from 'react-native';
-const screenWidth = Dimensions.get('window').width;
+import { useAuth } from '@/context/AuthContext';
 
+const screenWidth = Dimensions.get('window').width;
+const API_URL = 'http://127.0.0.1:8000/api/auth';
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
+interface Totals { calories: number; protein: number; carbs: number; fat: number; }
+interface Goals { calories: number; protein: number; carbs: number; fat: number; }
+interface MealLog { id: number; food_name: string; meal_type: string; calories: number; protein: number; carbs: number; fat: number; }
+
+const vars = {
+  dark: 'rgba(24, 24, 24, 1)',
+  highlight: 'rgba(231, 73, 0, 1)',
+  medium: 'rgba(28, 31, 30, 1)',
+  cardstroke: 'rgba(255, 255, 255, 0.12)',
+};
+
+
+const MacroRing = ({ radius, color, progress, strokeWidth = 16, size = 346 }: {
+  radius: number; color: string; progress: number; strokeWidth?: number; size?: number;
+}) => {
+  const circumference = 2 * Math.PI * radius;
+  const animatedProgress = useSharedValue(0);
+
+  useEffect(() => {
+    animatedProgress.value = withTiming(Math.min(progress, 1), {
+      duration: 1200,
+      easing: Easing.out(Easing.cubic),
+    });
+  }, [progress]);
+
+  const animatedProps = useAnimatedProps(() => ({
+    strokeDashoffset: circumference * (1 - animatedProgress.value),
+  }));
+
+  return (
+    <Svg width={size} height={size} style={{ position: 'absolute', top: 0, left: 0 }}>
+      <Circle
+        cx={size / 2} cy={size / 2} r={radius}
+        stroke="rgba(255,255,255,0.08)"
+        strokeWidth={strokeWidth} fill="none" strokeLinecap="round"
+      />
+      <AnimatedCircle
+        cx={size / 2} cy={size / 2} r={radius}
+        stroke={color} strokeWidth={strokeWidth} fill="none"
+        strokeDasharray={circumference}
+        animatedProps={animatedProps}
+        strokeLinecap="round"
+        rotation="-90"
+        origin={`${size / 2}, ${size / 2}`}
+      />
+    </Svg>
+  );
+};
 
 export default function TabOneScreen() {
   const date = new Date();
   const router = useRouter();
+  const { token, logout } = useAuth();
 
-  const dateformat = date.toLocaleDateString('en-US', {
-  weekday: 'short',
-  month: 'short',
-  day: 'numeric',
-  });
+  const [totals, setTotals] = useState<Totals>({ calories: 0, protein: 0, carbs: 0, fat: 0 });
+  const [goals, setGoals] = useState<Goals>({ calories: 2000, protein: 150, carbs: 200, fat: 65 });
+  const [meals, setMeals] = useState<MealLog[]>([]);
+
+  const dateformat = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+  const fetchData = async () => {
+    if (!token) return;
+    try {
+      const [totalsRes, goalsRes, mealsRes] = await Promise.all([
+        fetch(`${API_URL}/totals/`, { headers: { Authorization: `Token ${token}` } }),
+        fetch(`${API_URL}/goals/`, { headers: { Authorization: `Token ${token}` } }),
+        fetch(`${API_URL}/meals/`, { headers: { Authorization: `Token ${token}` } }),
+      ]);
+      const totalsData = await totalsRes.json();
+      const goalsData = await goalsRes.json();
+      const mealsData = await mealsRes.json();
+      setTotals({
+        calories: Number(totalsData.calories) || 0,
+        protein: Number(totalsData.protein) || 0,
+        carbs: Number(totalsData.carbs) || 0,
+        fat: Number(totalsData.fat) || 0,
+      });
+      setGoals({
+        calories: Number(goalsData.calories) || 2000,
+        protein: Number(goalsData.protein) || 150,
+        carbs: Number(goalsData.carbs) || 200,
+        fat: Number(goalsData.fat) || 65,
+      });
+      setMeals(Array.isArray(mealsData) ? mealsData : []);
+    } catch (e) {
+      console.error('Failed to fetch data', e);
+    }
+  };
+
+  useFocusEffect(useCallback(() => { fetchData(); }, [token]));
+
+  const breakfast = meals.filter(m => m.meal_type === 'breakfast');
+  const lunch = meals.filter(m => m.meal_type === 'lunch');
+  const snacks = meals.filter(m => m.meal_type === 'snack');
 
   return (
-    <ScrollView> 
-    <View style={styles.container}>
-      {/* FRAME (Main Container) */}
-      <View style={styles.frame}>
-        <View style={styles.topbackground} />
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.frame}>
+          <View style={styles.topbackground} />
 
-        <View style={{ margin: 12, flex: 1 }}>
-          <View style={styles.rectangle} />
-          <View style={styles.meals}>
-            <View style={styles.rectangle2} />
+          <View style={{ margin: 12, flex: 1 }}>
+            <View style={styles.rectangle} />
+            <Text style={styles.date}>{dateformat}</Text>
+            <View style={styles.rectangle16}>
+              <Menuicon width={48} height={48} />
+            </View>
+            <View style={styles.rectangle15} />
 
-            {/* GROUP-2 (Meal 1) */}
-            <View style={styles.group2}>
-              <View style={styles.rectangle3} />
-              <View style={styles.rectangle4} />
-              <View style={styles.rectangle5} />
-            
-              <View style={styles.group3}>
-                <View style={styles.rectangle6} />
-                <View style={styles.rectangle7} />
-                <View style={styles.rectangle8} />
-                <Text style={styles.textWrapper}>Food name</Text>
-                <Text style={styles.textWrapper2}>Count</Text>
+            {/* MAIN PLAN CARD */}
+            <View style={styles.mainGroup}>
+              <View style={styles.mainGroupBG}>
+
+                <View style={styles.planRow}>
+                  <Text style={styles.planText}>My Plan</Text>
+                  <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center', marginTop: 20 }}>
+                    <TouchableOpacity onPress={() => router.push('/editfoodpage')}>
+                      <Text style={styles.editText}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={logout}>
+                      <Text style={[styles.editText, { color: '#ff4444' }]}>Logout</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Animated Macro Rings */}
+                <View style={styles.group8}>
+                  <MacroRing radius={155} color={variabless.VariableCollectionH1} progress={totals.fat / goals.fat} />
+                  <MacroRing radius={125} color={variabless.VariableCollectionH3} progress={totals.protein / goals.protein} />
+                  <MacroRing radius={95} color={variabless.VariableCollectionH2} progress={totals.carbs / goals.carbs} />
+
+                  <View style={styles.kcalBackground} />
+                  <View style={styles.randomassdotontheright} />
+
+                  <Text style={styles.fatsText}>fats</Text>
+                  <Text style={styles.proteinsText}>proteins</Text>
+                  <Text style={styles.carbsText}>carbs</Text>
+                  <Text style={styles.fatsGramsText}>{Math.round(totals.fat)}/{goals.fat} g</Text>
+                  <Text style={styles.proteinsGramsText}>{Math.round(totals.protein)}/{goals.protein} g</Text>
+                  <Text style={styles.carbsGramsText}>{Math.round(totals.carbs)}/{goals.carbs} g</Text>
+                </View>
+
+                {/* Recommended next meal */}
+                <View style={styles.nextMealGroup}>
+                  <View style={styles.rectangle17} />
+                  <View style={styles.rectangle18} />
+                  <View style={styles.rectangle19} />
+                  <View style={styles.rectangle20} />
+                  <View style={styles.rectangle21} />
+                  <Text style={styles.textWrapper11}>
+                    {totals.calories < goals.calories
+                      ? `${Math.round(goals.calories - totals.calories)} kcal remaining today`
+                      : '🎉 Daily goal reached!'}
+                  </Text>
+                </View>
+
+              </View>
+            </View>
+
+            {/* KCAL display */}
+            <View style={styles.kcalGroup}>
+              <Text style={styles.kcalCurrent}>{Math.round(totals.calories)}</Text>
+              <View style={styles.kcalDivider} />
+              <Text style={styles.kcalGoal}>{goals.calories}</Text>
+              <Text style={styles.kcalText}>kcal</Text>
+            </View>
+
+            {/* Meals section */}
+            <View style={styles.meals}>
+              <View style={styles.rectangle2} />
+
+              <View style={styles.mealSection}>
+                <Text style={styles.mealSectionTitle}>Breakfast</Text>
+                {breakfast.length === 0 ? (
+                  <Text style={styles.emptyMeal}>No items logged</Text>
+                ) : breakfast.map(m => (
+                  <View key={m.id} style={styles.mealItem}>
+                    <Text style={styles.mealItemName}>{m.food_name}</Text>
+                    <Text style={styles.mealItemCals}>{Math.round(m.calories)} kcal</Text>
+                  </View>
+                ))}
               </View>
 
-            <View style={styles.group4}>
-              <View style={styles.rectangle9} />
-              <View style={styles.rectangle10} />
+              <View style={styles.mealSection}>
+                <Text style={styles.mealSectionTitle}>Lunch</Text>
+                {lunch.length === 0 ? (
+                  <Text style={styles.emptyMeal}>No items logged</Text>
+                ) : lunch.map(m => (
+                  <View key={m.id} style={styles.mealItem}>
+                    <Text style={styles.mealItemName}>{m.food_name}</Text>
+                    <Text style={styles.mealItemCals}>{Math.round(m.calories)} kcal</Text>
+                  </View>
+                ))}
+              </View>
+
+              <View style={styles.mealSection}>
+                <Text style={styles.mealSectionTitle}>Snacks</Text>
+                {snacks.length === 0 ? (
+                  <Text style={styles.emptyMeal}>No items logged</Text>
+                ) : snacks.map(m => (
+                  <View key={m.id} style={styles.mealItem}>
+                    <Text style={styles.mealItemName}>{m.food_name}</Text>
+                    <Text style={styles.mealItemCals}>{Math.round(m.calories)} kcal</Text>
+                  </View>
+                ))}
+              </View>
             </View>
-            <Text style={styles.textWrapper3}>Breakfast</Text>
           </View>
 
-          {/* GROUP-5 (Meal 2) this thing is like very slightly off center maybe*/}
-          <View style={styles.meal2}>
-            <View style={styles.rectangle11} />
-            <View style={styles.rectangle12} />
-            <Text style={styles.textWrapper4}>Lunch</Text>
-            <View style={styles.rectangle13} />
-          </View>
-        </View>
-        
-        <View style={styles.rectangle15}/>
-        <View style={styles.rectangle16} >
-            <Menuicon width={48} height={48} />
-        </View>
-
-        {/* GROUP-WRAPPER main group */}
-        <View style={styles.mainGroup}>
-          <View style={styles.mainGroupBG}>
-            <View style={styles.planRow}>
-              <Text style={styles.planText}>My Plan</Text>
-              <TouchableOpacity onPress={() => router.push('/editfoodpage')}>
-                <Text style={styles.editText}>Edit</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.group8}>
-              <View style={styles.ellipse1Container}>
-                <Ellipse1 width={183} height={342} />
-              </View>
-              <View style={styles.ellipse2Container}>
-                <Ellipse2 width={155} height={286} />
-              </View>
-              <View style={styles.ellipse3Container}>
-                <Ellipse3 width={126} height={227} />
-              </View>
-              <View style={styles.ellipse6Container}>
-                <Ellipse6 width={107} height={72} />
-              </View>
-              <View style={styles.ellipse7Container}>
-                <Ellipse7 width={147} height={173} />
-              </View>
-              <View style={styles.ellipse8Container}>
-                <Ellipse8 width={172} height={146} />
-              </View>
-
-              <View style={styles.kcalBackground} />
-              <View style={styles.randomassdotontheright} />
-              
-              <Text style={styles.carbsText}>carbs</Text>
-              <Text style={styles.proteinsText}>proteins</Text>
-              <Text style={styles.fatsText}>fats</Text>
-              <Text style={styles.carbsGramsText}>20/55 g</Text>
-              <Text style={styles.proteinsGramsText}>80/120 g</Text>
-              <Text style={styles.fatsGramsText}>154/310 g</Text>
-            </View>
-            
-            {/* GROUP-9 (Recommended Next Meal) */}
-            <View style={styles.nextMealGroup}>
-              <View style={styles.rectangle17} />
-              <View style={styles.rectangle18} />
-              <View style={styles.rectangle19} />
-              <View style={styles.rectangle20} />
-              <View style={styles.rectangle21} />
-              <Text style={styles.textWrapper11}>recommended next meal</Text>
-            </View>
-          </View>
-        </View>        
-        
-        
-        <Text style={styles.announcements}>Notifs/Announce</Text>
-        <Text style={styles.date}>{dateformat}</Text>
-
-        <Text style={styles.amText}>7:00 am</Text>
-        <Text style={styles.pmText}>7:00 pm</Text>
-
-        <View style={styles.rectangle23} >
-            <Rightarrow/>
-        </View>
-        <View style={styles.rectangle24} >
-            <Leftarrow/>
-        </View>
-        
-
-        {/* Group 10 is an image (.png) */}
-        <Image style={styles.group10} alt="Group" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/group-11@2x.png" }} />
-
-        {/* GROUP-11 (KCAL display) */}
-        <View style={styles.kcalGroup}>
-          <Text style={styles.kcalCurrent}>600</Text>
-          <View style={styles.kcalDivider}/>
-          <Text style={styles.kcalGoal}>1750</Text>
-          <Text style={styles.kcalText}>kcal</Text>
+          <Text style={styles.announcements}>Notifs/Announce</Text>
+          <Text style={styles.amText}>7:00 am</Text>
+          <Text style={styles.pmText}>7:00 pm</Text>
+          <View style={styles.rectangle23}><Rightarrow /></View>
+          <View style={styles.rectangle24}><Leftarrow /></View>
         </View>
       </View>
-      </View>
-    </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
+  container: { flex: 1, justifyContent: 'center' },
   frame: {
     flex: 1,
-    backgroundColor: variabless.VariableCollectionDark, 
+    backgroundColor: variabless.VariableCollectionDark,
     minHeight: 1176,
-    //minWidth: 440,?
     overflow: 'hidden',
-    position: 'relative', // Necessary for absolute children
+    position: 'relative',
     width: '100%',
   },
-
-  // CSS: .frame .rectangle
   rectangle: {
-    backgroundColor: variabless.VariableCollectionMedium, 
+    backgroundColor: variabless.VariableCollectionMedium,
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 16,
-    // Note: box-shadow is converted to RN's specific shadow properties
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25, // #00000040 is 25% opacity
+    shadowOpacity: 0.25,
     shadowRadius: 4,
-    
     height: 59,
     position: 'absolute',
     top: 131,
     width: '100%',
   },
-
-  //og named div
-  //top background 
   topbackground: {
-    backgroundColor: variabless.VariableCollectionMedium, 
+    backgroundColor: variabless.VariableCollectionMedium,
     height: 126,
     position: 'absolute',
     width: screenWidth,
   },
-
-  meals: {
-    height: 360,    
-    position: 'absolute',
-    top: 791,
-    width: '100%',
-  },
-
+  meals: { marginTop: 620, width: '100%' },
   rectangle2: {
-    backgroundColor: variabless.VariableCollectionMedium, 
+    backgroundColor: variabless.VariableCollectionMedium,
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 16,
-    height: 337,
     position: 'absolute',
-    top: 0,
-    width: '100%',
+    top: 0, left: 0, right: 0, bottom: 0,
   },
-
-  group2: {
-    height: 197,
-    left: '50%',
-    transform: [{ translateX: -170 }],
-
-    position: 'absolute',
-    top: 13,
-    width: 342,
-  },
-
-  rectangle3: {
-    backgroundColor: '#bdbdbd',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 12,
-    height: 197,
-    left: '50%',
-    transform: [{ translateX: -171 }],
-    
-    position: 'absolute',
-    top: 0,
-    width: 340,
-  },
-
-  rectangle4: {
-    backgroundColor: '#afafaf',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    bottom: 10,
-    height: 8,
-    left: '50%',
-    transform: [{ translateX: -163 }],
-    
-    position: 'absolute',
-    width: 325,
-  },
-
-  rectangle5: {
-    backgroundColor: '#afafaf',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    height: 35,
-    left: 299,
-    position: 'absolute',
-    top: 11,
-    width: 34,
-  },
-
-  group3: {
-    height: 38,
-    left: '50%',
-    top: '50%',
-    transform: [
-      { translateX: -164 }, 
-      { translateY: -42 }
-    ],
-    position: 'absolute',
-    width: 330,
-  },
-
-  rectangle6: {
-    backgroundColor: '#afafaf',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 8,
-    height: 38,
-    left: '50%',
-    top: '50%',
-    transform: [
-      { translateX: -165 }, 
-      { translateY: -19 }
-    ],
-    position: 'absolute',
-    width: 326,
-  },
-
-  rectangle7: {
-    backgroundColor: '#bdbdbd',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    height: 26,
-    left: '50%',
-    top: '50%',
-    transform: [
-      { translateX: 130 }, 
-      { translateY: -13 }
-    ],
-    position: 'absolute',
-    width: 25,
-  },
-
-  rectangle8: {
-    backgroundColor: '#bdbdbd',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    height: 26,
-    left: '50%',
-    top: '50%',
-    transform: [
-      { translateX: 97 }, 
-      { translateY: -13 }
-    ],
-    position: 'absolute',
-    width: 25,
-  },
-
-  // CSS: .frame .text-wrapper (Note: -webkit-text-stroke is omitted)
-  textWrapper: {
-    // -webkit-text-stroke omitted
-    alignItems: 'center',
-    color: '#ffffff',
-    // Note: font-family 'Inter' must be loaded in Expo
-    fontFamily: 'Inter', 
-    fontSize: 12,
-    fontWeight: '400',
-    height: 25,
-    justifyContent: 'center',
-    left: 6,
-    letterSpacing: 0,
-    lineHeight: 12, // Using font size as a default line height for 'normal'
-    position: 'absolute',
-    top: 6,
-    width: 131,
-  },
-
-  textWrapper2: {
-    // -webkit-text-stroke is omitted
-    alignItems: 'center',
-    color: '#ffffff',
-    // fontFamily 'Inter' must be loaded
-    fontFamily: 'Inter', 
-    fontSize: 12,
-    fontWeight: '400',
-    height: 25,
-    justifyContent: 'center',
-    left: 124,
-    letterSpacing: 0,
-    lineHeight: 12, // Using font size as a default line height
-    position: 'absolute',
-    top: 6,
-    width: 131,
-  },
-
-  // CSS: .frame .group-4
-  group4: {
-    backgroundColor: '#afafaf',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 8,
-    height: 38,
-    // Converting left: calc(50.00% - 163px) and top: calc(50.00% + 2px)
-    left: '50%',
-    top: '50%',
-    transform: [
-      { translateX: -163 },
-      { translateY: 2 }
-    ],
-    position: 'absolute',
-    width: 326,
-  },
-
-  // CSS: .frame .rectangle-9
-  rectangle9: {
-    backgroundColor: '#bdbdbd',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    height: 26,
-    // Converting left: calc(50.00% + 132px) and top: calc(50.00% - 13px)
-    left: '50%',
-    top: '50%',
-    transform: [
-      { translateX: 132 },
-      { translateY: -13 }
-    ],
-    position: 'absolute',
-    width: 25,
-  },
-
-  // CSS: .frame .rectangle-10
-  rectangle10: {
-    backgroundColor: '#bdbdbd',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    height: 26,
-    // Converting left: calc(50.00% + 99px) and top: calc(50.00% - 13px)
-    left: '50%',
-    top: '50%',
-    transform: [
-      { translateX: 99 },
-      { translateY: -13 }
-    ],
-    position: 'absolute',
-    width: 25,
-  },
-
-  // CSS: .frame .text-wrapper-3 (Text style)
-  textWrapper3: {
-    // -webkit-text-stroke is omitted
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: '400',
-    height: 22,
-    justifyContent: 'center',
-    left: 7,
-    letterSpacing: 0,
-    lineHeight: 16, // Using font size as line height
-    position: 'absolute',
-    top: 17,
-    width: 92,
-  },
-
-  //meal 2
-  meal2: {
-    height: 66,
-    left: '50%',
-    transform: [{ translateX: -170 }],
-    position: 'absolute',
-    top: 219,
-    width: 342,
-  },
-
-  rectangle11: {
-    backgroundColor: '#bdbdbd',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 12,
-    height: 66,
-    // Converting left: calc(50.00% - 171px)
-    left: '50%',
-    transform: [{ translateX: -171 }],
-    position: 'absolute',
-    top: 0,
-    width: 340,
-  },
-
-  // CSS: .frame .rectangle-12
-  rectangle12: {
-    backgroundColor: '#afafaf',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    bottom: 8,
-    height: 8,
-    // Converting left: calc(50.00% - 162px)
-    left: '50%',
-    transform: [{ translateX: -162 }],
-    position: 'absolute',
-    width: 325,
-  },
-
-  // CSS: .frame .text-wrapper-4 (Text style)
-  textWrapper4: {
-    // -webkit-text-stroke is omitted
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: '400',
-    height: 22,
-    justifyContent: 'center',
-    left: 6,
-    letterSpacing: 0,
-    lineHeight: 12,
-    position: 'absolute',
-    top: 8,
-    width: 92,
-  },
-
-  // CSS: .frame .rectangle-13
-  rectangle13: {
-    backgroundColor: '#afafaf',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    height: 35,
-    left: 299,
-    position: 'absolute',
-    top: 9,
-    width: 34,
-  },
-
-  // CSS: .frame .group-6
-  group6: {
-    height: 66,
-    left: '50%',
-    transform: [{ translateX: -170 }],
-    position: 'absolute',
-    top: 294,
-    width: 342,
-  },
-
-  // CSS: .frame .rectangle-14
-  rectangle14: {
-    backgroundColor: '#afafaf',
-    borderWidth: 1,
-    borderColor: '#ffffff1f',
-    borderRadius: 30,
-    height: 35,
-    left: 298,
-    position: 'absolute',
-    top: 6,
-    width: 34,
-  },
-
-  // CSS: .frame .rectangle-15
-  rectangle15: {
-    backgroundColor: '#e74900',
-    borderRadius: 30,
-    height: 46,
-    position: 'absolute',
-    top: 50,
-    width: 46,
-    left: '80.7%', //guessed slightly off 
-  },
-
-  rectangle16: {
-    //backgroundColor: '#e74900',
-    borderRadius: 30,
-    height: 46,
-    position: 'absolute',
-    top: 50,
-    width: 46,
-    left: '8.86%',//math
-  },
-
+  mealSection: { paddingHorizontal: 16, paddingVertical: 12 },
+  mealSectionTitle: { color: '#ffffff', fontFamily: 'Inter', fontSize: 16, fontWeight: '600', marginBottom: 8 },
+  mealItem: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)' },
+  mealItemName: { color: '#ffffff', fontFamily: 'Inter', fontSize: 13, flex: 1 },
+  mealItemCals: { color: 'rgba(255,255,255,0.5)', fontFamily: 'Inter', fontSize: 13 },
+  emptyMeal: { color: 'rgba(255,255,255,0.3)', fontFamily: 'Inter', fontSize: 12, fontStyle: 'italic' },
+  rectangle15: { backgroundColor: '#e74900', borderRadius: 30, height: 46, position: 'absolute', top: 50, width: 46, left: '80.7%' },
+  rectangle16: { borderRadius: 30, height: 46, position: 'absolute', top: 50, width: 46, left: '8.86%' },
   mainGroup: {
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 16,
-    // Box shadow conversion
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25, // #00000040 is 25% opacity
+    shadowOpacity: 0.25,
     shadowRadius: 4,
-    
-    // display: flex is default, justifyContent centers the content
     justifyContent: 'center',
     height: 582,
     overflow: 'hidden',
@@ -573,499 +298,53 @@ const styles = StyleSheet.create({
     top: 199,
     width: '100%',
   },
-
-  // CSS: .frame .group-7
   mainGroupBG: {
     alignItems: 'center',
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
+    backgroundColor: variabless.VariableCollectionMedium,
     borderRadius: 16,
-
-    
-    // display: flex and flex-direction: column are standard for View
     flexDirection: 'column',
-    
-    gap: 0, // removed gap between next meal group n giant group, added marginbottom to giant group instead
     height: 582,
     width: '100%',
   },
-
-  planRow: {
-  flexDirection: 'row',
-  justifyContent: 'space-between', // planText left, editText right
-  alignItems: 'center',            // vertical alignment
-  width: '100%',                   // span the whole group7 width
-  paddingHorizontal: 16,           // optional, spacing from edges
-},
-
-planText: {
-  color: '#ffffff',
-  fontFamily: 'Lekton',
-  fontSize: 20,
-  fontWeight: '700',
-  lineHeight: 24,
-  textAlign: 'left',
-  marginTop: 20,
-},
-
-editText: {
-  color: '#e74900',
-  fontFamily: 'Lekton',
-  fontSize: 16,
-  fontWeight: '400',
-  lineHeight: 16,
-  textAlign: 'right',
-  textDecorationLine: 'underline',
-  marginTop: 20,
-},
-
-  // CSS: .frame .group-8
-  group8: {
-    height: 334,
-    marginLeft: 10,
-    marginTop: 22,      //fat
-    marginBottom: 90,   //guess
-    position: 'relative',
-    width: 346,
-  },
-
-  ellipse1Container: {
-    position: 'absolute',
-    top: 0,
-    left: '50%',
-    transform: [{ translateX: -177 }], 
-  },
-
-  ellipse2Container: {
-    position: 'absolute',
-    top: 28,
-    left: '50%',
-    transform: [{ translateX: -149 }], 
-  },
-
-  ellipse3Container: {
-    position: 'absolute',
-    top: 57,
-    left: '50%',
-    transform: [{ translateX: -120 }], 
-  },
-
-  ellipse6Container: {
-    position: 'absolute',
-    top: 204,
-    left: '50%',
-    transform: [{ translateX: -105 }], 
-  },
-
-  ellipse7Container: {
-    position: 'absolute',
-    top: 132,
-    left: '50%',
-    transform: [{ translateX: -145 }], 
-  },
-
-  ellipse8Container: {
-    position: 'absolute',
-    top: 188,
-    left: '50%',
-    transform: [{ translateX: -170 }], 
-  },
-
-
-  // CSS: .frame .ellipse-6 (Gradient converted to solid fallback)
+  planRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingHorizontal: 16 },
+  planText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 20, fontWeight: '700', lineHeight: 24, marginTop: 20 },
+  editText: { color: '#e74900', fontFamily: 'Lekton', fontSize: 16, fontWeight: '400', textDecorationLine: 'underline' },
+  group8: { height: 346, marginTop: 22, marginBottom: 20, position: 'relative', width: 346, alignSelf: 'center' },
   kcalBackground: {
-    // Fallback for linear-gradient: rgba(255, 255, 255, 0.12)
     backgroundColor: 'rgba(255, 255, 255, 0.12)',
     borderWidth: 2,
     borderColor: '#ffffff1f',
-    // Rounding '77.24px' to 77
-    borderRadius: 77, 
-    // Box shadow conversion
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25, // #00000040 is 25% opacity
-    shadowRadius: 4,
-    
+    borderRadius: 77,
     height: 154,
-    left: 90,
+    left: 96,
     position: 'absolute',
-    top: 90,
+    top: 96,
     width: 154,
   },
+  randomassdotontheright: { backgroundColor: '#ffffff', borderRadius: 33, height: 66, left: 262, opacity: 0.2, position: 'absolute', top: 134, width: 66 },
+  carbsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 55 },
+  proteinsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 26 },
+  fatsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 0 },
+  carbsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 260 },
+  proteinsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 290 },
+  fatsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 320 },
+  nextMealGroup: { height: 60, marginLeft: 32, position: 'relative', width: 380 },
+  rectangle17: { backgroundColor: '#2d2d2d', borderRadius: 12, height: 60, left: '50%', transform: [{ translateX: -190 }], position: 'absolute', top: 0, width: 348 },
+  rectangle18: { backgroundColor: '#2d2d2d', borderTopLeftRadius: 12, borderBottomLeftRadius: 12, height: 60, left: '50%', transform: [{ translateX: 172 }], position: 'absolute', top: 0, width: 16 },
+  rectangle19: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 17, left: '50%', transform: [{ translateX: 62 }], position: 'absolute', top: 21, width: 50 },
+  rectangle20: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 44, left: '50%', transform: [{ translateX: -175 }], position: 'absolute', top: 8, width: 223 },
+  rectangle21: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 36, left: '50%', transform: [{ translateX: 133 }], position: 'absolute', top: 12, width: 14 },
+  textWrapper11: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 24, letterSpacing: 0, lineHeight: 12, position: 'absolute', top: 18, width: 280 },
+  announcements: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -207 }], position: 'absolute', textAlign: 'center', top: 153, width: 416 },
+  date: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -113 }], position: 'absolute', textAlign: 'center', top: '6%', width: 226 },
+  rectangle23: { height: 29, position: 'absolute', top: 60, width: 20, left: '59.77%' },
+  rectangle24: { height: 29, position: 'absolute', top: 60, width: 20, left: '36.36%' },
+  amText: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '11%', opacity: 0.4, position: 'absolute', top: 662 },
+  pmText: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '76.5%', opacity: 0.4, position: 'absolute', top: 662 },
+  kcalGroup: { flexDirection: 'column', height: 92, left: '33.8%', position: 'absolute', top: 385, width: 160 },
+  kcalCurrent: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '700', height: 36, lineHeight: 36, textAlign: 'center', width: 154 },
+  kcalDivider: { backgroundColor: '#ffffff', height: 2, marginLeft: 23, marginTop: 1, width: 109 },
+  kcalGoal: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '400', height: 36, lineHeight: 36, marginLeft: 35, marginTop: 9, width: 84 },
+  kcalText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', height: 23, lineHeight: 12, marginLeft: 30, marginTop: 3, textAlign: 'right', width: 78 },
 
-  // CSS: .frame .ellipse-7
-  randomassdotontheright: {
-    backgroundColor: '#ffffff',
-    // Rounding '32.88px' to 33
-    borderRadius: 33, 
-    height: 66,
-    left: 262,
-    opacity: 0.2,
-    position: 'absolute',
-    top: 134,
-    width: 66,
-  },
-
-  // CSS: .frame .text-wrapper-5
-  carbsText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    // fontFamily 'Lekton' must be loaded
-    fontFamily: 'Lekton', 
-    fontSize: 12,
-    fontWeight: '700',
-    justifyContent: 'center',
-    left: 181,
-    letterSpacing: 0,
-    lineHeight: 15, 
-    position: 'absolute',
-    top: 55,
-    // white-space: nowrap is omitted
-  },
-
-  // CSS: .frame .text-wrapper-6
-  proteinsText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Lekton',
-    fontSize: 12,
-    fontWeight: '700',
-    justifyContent: 'center',
-    left: 181,
-    letterSpacing: 0,
-    lineHeight: 15,
-    position: 'absolute',
-    top: 26,
-  },
-
-  // CSS: .frame .text-wrapper-7
-  fatsText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Lekton',
-    fontSize: 12,
-    fontWeight: '700',
-    justifyContent: 'center',
-    left: 181,
-    letterSpacing: 0,
-    lineHeight: 12,
-    position: 'absolute',
-    top: 0,
-  },
-
-  // CSS: .frame .text-wrapper-8
-  carbsGramsText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Lekton',
-    fontSize: 12,
-    fontWeight: '400',
-    justifyContent: 'center',
-    left: 181,
-    letterSpacing: 0,
-    lineHeight: 15,
-    opacity: 0.4,
-    position: 'absolute',
-    top: 260,
-  },
-
-  // CSS: .frame .text-wrapper-9
-  proteinsGramsText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Lekton',
-    fontSize: 12,
-    fontWeight: '400',
-    justifyContent: 'center',
-    left: 181,
-    letterSpacing: 0,
-    lineHeight: 15,
-    opacity: 0.4,
-    position: 'absolute',
-    top: 290,
-  },
-
-  // CSS: .frame .text-wrapper-10
-  fatsGramsText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Lekton',
-    fontSize: 12,
-    fontWeight: '400',
-    justifyContent: 'center',
-    left: 181,
-    letterSpacing: 0,
-    lineHeight: 15,
-    opacity: 0.4,
-    position: 'absolute',
-    top: 320,
-  },
-
-  //next meal group
-  nextMealGroup: {
-    height: 60,
-    marginLeft: 32,
-    position: 'relative',
-    width: 380,
-  },
-
-  //background of next meal group?
-  rectangle17: {
-    backgroundColor: '#2d2d2d',
-    borderRadius: 12,
-    height: 60,
-    left: '50%',
-    transform: [{ translateX: -190 }],
-    position: 'absolute',
-    top: 0,
-    width: 348,
-  },
-
-  // CSS: .frame .rectangle-18 (Right end tab of Group 9) <- next meal group??
-  rectangle18: {
-    backgroundColor: '#2d2d2d',
-    // RN individual border radii
-    borderTopLeftRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    
-    height: 60,
-    // Converting left: calc(50.00% + 172px)
-    left: '50%',
-    transform: [{ translateX: 172 }],
-    position: 'absolute',
-    top: 0,
-    width: 16,
-  },
-
-  // CSS: .frame .rectangle-19
-  rectangle19: {
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
-    borderRadius: 12,
-    height: 17,
-    // Converting left: calc(50.00% + 62px)
-    left: '50%',
-    transform: [{ translateX: 62 }],
-    position: 'absolute',
-    top: 21,
-    width: 50,
-  },
-
-  // CSS: .frame .rectangle-20
-  rectangle20: {
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
-    borderRadius: 12,
-    height: 44,
-    // Converting left: calc(50.00% - 175px)
-    left: '50%',
-    transform: [{ translateX: -175 }],
-    position: 'absolute',
-    top: 8,
-    width: 223,
-  },
-
-  // CSS: .frame .rectangle-21
-  rectangle21: {
-    backgroundColor: variabless.VariableCollectionMedium, // Placeholder for var(--variable-collection-medium)
-    borderRadius: 12,
-    height: 36,
-    // Converting left: calc(50.00% + 133px)
-    left: '50%',
-    transform: [{ translateX: 133 }],
-    position: 'absolute',
-    top: 12,
-    width: 14,
-  },
-
-  // CSS: .frame .text-wrapper-11
-  textWrapper11: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: '400',
-    height: 27,
-    justifyContent: 'center',
-    left: 24,
-    letterSpacing: 0,
-    lineHeight: 12,
-    position: 'absolute',
-    top: 18,
-    width: 199,
-  },
-
-  //announcements
-  announcements: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: '400',
-    height: 62,
-    justifyContent: 'center',
-    // Converting left: calc(50.00% - 207px)
-    left: '50%',
-    transform: [{ translateX: -207 }],
-    letterSpacing: 0,
-    lineHeight: 12, // Using font size as a default line height
-    position: 'absolute',
-    textAlign: 'center',
-    top: 153,
-    width: 416,
-  },
-
-  // date
-  date: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: '400',
-    height: 43,
-    justifyContent: 'center',
-    // Converting left: calc(50.00% - 113px)
-    left: '50%',
-    transform: [{ translateX: -113 }],
-    letterSpacing: 0,
-    lineHeight: 12,
-    position: 'absolute',
-    textAlign: 'center',
-    top: '6%', //guess
-    width: 226,
-  },
-
-  // CSS: .frame .rectangle-23
-  rectangle23: {
-    //backgroundColor: '#afafaf',
-    height: 29,
-    position: 'absolute',
-    top: 60,
-    width: 20,
-    left: '59.77%', //263 / (160 + 260)
-
-  },
-
-  // CSS: .frame .rectangle-24
-  rectangle24: {
-    //backgroundColor: '#afafaf',
-    height: 29,
-    position: 'absolute',
-    top: 60,
-    width: 20,
-    left: '36.36%', //160 / 160 + 260
-  },
-
-
-  //am 
-  amText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: '400',
-    height: 15,
-    justifyContent: 'center',
-    left: '11%', //guess
-    letterSpacing: 0,
-    lineHeight: 12,
-    opacity: 0.4,
-    position: 'absolute',
-    top: 662,
-  },
-
-  //pm text
-  pmText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: '400',
-    height: 15,
-    justifyContent: 'center',
-    left: '76.5%', //guess
-    letterSpacing: 0,
-    lineHeight: 12,
-    opacity: 0.4,
-    position: 'absolute',
-    top: 662,
-  },
-
-  // CSS: .frame .group-10
-  group10: {
-    height: 28,
-    // Converting left: calc(50.00% - 175px)
-    left: '50%',
-    transform: [{ translateX: -175 }],
-    position: 'absolute',
-    top: 625,
-    width: 348,
-  },
-
-  //kcal group
-  kcalGroup: {
-    // RN default display is flex, but we explicitly set direction
-    flexDirection: 'column', 
-    height: 92,
-    left: "33.8%", //guessed
-    position: 'absolute',
-    top: 385,
-    width: 160,
-  },
-
-  //kcal current
-  kcalCurrent: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 36,
-    fontWeight: '700',
-    height: 36,
-    justifyContent: 'center',
-    letterSpacing: 0,
-    lineHeight: 36, // Set line height to match font size
-    textAlign: 'center',
-    width: 154,
-    //marginBottom: 4,
-    // Note: Since this is inside a column, justify/align items might not apply cleanly 
-    // unless this <Text> is wrapped in a <View>, but keeping the style properties as is.
-  },
-
-  kcalDivider: {
-    backgroundColor: '#ffffff',
-    height: 2,
-    marginLeft: 23,
-    marginTop: 1,
-    width: 109,
-  },
-
-  kcalGoal: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 36,
-    fontWeight: '400',
-    height: 36,
-    justifyContent: 'center',
-    letterSpacing: 0,
-    lineHeight: 36,
-    marginLeft: 35,
-    marginTop: 9,
-    width: 84,
-  },
-
-  kcalText: {
-    alignItems: 'center',
-    color: '#ffffff',
-    fontFamily: 'Lekton',
-    fontSize: 12,
-    fontWeight: '700',
-    height: 23,
-    justifyContent: 'center',
-    letterSpacing: 0,
-    lineHeight: 12,
-    marginLeft: 30,
-    marginTop: 3,
-    textAlign: 'right',
-    width: 78,
-  },
 });
