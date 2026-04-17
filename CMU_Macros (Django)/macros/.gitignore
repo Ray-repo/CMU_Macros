@@ -1,0 +1,3 @@
+db.sqlite3
+macros/CMUMacros/__pycache__/
+**/*.pyc
