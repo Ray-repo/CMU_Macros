@@ -22,17 +22,37 @@ export default function TabLayout() {
     <Tabs
       initialRouteName="index"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#e74900', // Matches your orange theme
+        tabBarInactiveTintColor: '#888',
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6. 
         headerShown: useClientOnlyValue(false, false), //second one hides tab bar(bar at top of each tab) on expo demo?
+        // The "Floating" Tab Bar Style
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 10,
+          left: 10,
+          right: 10,
+          elevation: 0,
+          backgroundColor: '#2d2d2d', // Matches your meal cards
+          borderRadius: 20,
+          height: 70,
+          borderTopWidth: 0, // Removes the standard gray line
+        },
+        tabBarItemStyle: {
+          marginTop: 10,
+          marginBottom: 10,
+        },
       }}>
+        <Tabs
+    ></Tabs>
 
       <Tabs.Screen
         name="two"
         options={{
           title: 'Tab Two',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          href: null,
         }}
         
       />

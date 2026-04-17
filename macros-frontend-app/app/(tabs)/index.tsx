@@ -1,3 +1,4 @@
+import "../../global.css"; // Add this line
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { variabless } from '@/constants/indextabvars';
 import { useRouter } from 'expo-router';
@@ -272,7 +273,7 @@ export default function TabOneScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { flex: 1, justifyContent: 'center'},
   frame: {
     flex: 1,
     backgroundColor: variabless.VariableCollectionDark, 
