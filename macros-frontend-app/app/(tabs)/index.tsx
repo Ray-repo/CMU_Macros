@@ -139,34 +139,48 @@ export default function TabOneScreen() {
           <View style={{ margin: 12, flex: 1, position: 'relative' }}>
             <View style={styles.rectangle} />
             
-            <View style={styles.meals}>
-              <View style={styles.rectangle2} />
-              {/* Breakfast Section */}
-              <View style={styles.group2}>
-                <View style={styles.rectangle3} />
-                <View style={styles.rectangle4} />
-                <View style={styles.rectangle5} />
-                <View style={styles.group3}>
-                  <View style={styles.rectangle6} />
-                  <View style={styles.rectangle7} />
-                  <View style={styles.rectangle8} />
-                  <Text style={styles.textWrapper}>{breakfast[0]?.food_name || "Food name"}</Text>
-                  <Text style={styles.textWrapper2}>{breakfast[0] ? `${Math.round(breakfast[0].calories)} kcal` : "Count"}</Text>
-                </View>
-                <View style={styles.group4}>
-                  <View style={styles.rectangle9} />
-                  <View style={styles.rectangle10} />
-                </View>
-                <Text style={styles.textWrapper3}>Breakfast</Text>
-              </View>
-              {/* Lunch Section */}
-              <View style={styles.meal2}>
-                <View style={styles.rectangle11} />
-                <View style={styles.rectangle12} />
-                <Text style={styles.textWrapper4}>Lunch: {lunch[0]?.food_name || "No items"}</Text>
-                <View style={styles.rectangle13} />
-              </View>
-            </View>
+<View style={styles.mealsContainer}>
+  {/* BREAKFAST SECTION */}
+  <View style={styles.mealGroup}>
+    <View style={styles.rectangle3} />
+    <Text style={styles.textWrapper3}>Breakfast</Text>
+    
+    <View style={styles.mealListContainer}>
+      {breakfast.map((item, index) => (
+        <View key={item.id || index} style={styles.itemRow}>
+          <View style={styles.rectangle6} />
+          <View style={styles.rectangle7} />
+          <View style={styles.rectangle8} />
+          <Text style={styles.textWrapper}>{item.food_name}</Text>
+          <Text style={styles.textWrapper2}>{`${Math.round(item.calories)} kcal`}</Text>
+        </View>
+      ))}
+      {breakfast.length === 0 && <Text style={styles.emptyText}>No breakfast items</Text>}
+    </View>
+    <View style={styles.rectangle4} />
+  </View>
+
+  {/* LUNCH SECTION */}
+  <View style={styles.mealGroup}>
+    <View style={styles.rectangle3} />
+    <Text style={styles.textWrapper3}>Lunch</Text>
+    
+    <View style={styles.mealListContainer}>
+      {lunch.map((item, index) => (
+        <View key={item.id || index} style={styles.itemRow}>
+          <View style={styles.rectangle6} />
+          <View style={styles.rectangle7} />
+          <View style={styles.rectangle8} />
+          <Text style={styles.textWrapper}>{item.food_name}</Text>
+          <Text style={styles.textWrapper2}>{`${Math.round(item.calories)} kcal`}</Text>
+        </View>
+      ))}
+      {lunch.length === 0 && <Text style={styles.emptyText}>No lunch items</Text>}
+    </View>
+    <View style={styles.rectangle4} />
+  </View>
+</View>
+{/*meals end*/}            
             
             <View style={styles.rectangle15}/>
             <View style={styles.rectangle16}>
@@ -291,22 +305,87 @@ const styles = StyleSheet.create({
     height: 337,
     position: 'absolute',
     top: 0,
+    width: '100%',},
+ // Main wrapper for all meals
+  mealsContainer: {
+    marginTop: 791, // Keeps the whole section starting at the right place
+    paddingHorizontal: 12,
+    paddingBottom: 40,
     width: '100%',
+    backgroundColor: variabless.VariableCollectionMedium, // This replaces rectangle2
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#ffffff1f',
   },
-  group2: { height: 197, left: '50%', transform: [{ translateX: -170 }], position: 'absolute', top: 13, width: 342 },
-  rectangle3: { backgroundColor: '#bdbdbd', borderRadius: 12, height: 197, width: 340, position: 'absolute' },
-  rectangle4: { backgroundColor: '#afafaf', borderRadius: 30, bottom: 10, height: 8, left: 8, position: 'absolute', width: 325 },
-  rectangle5: { backgroundColor: '#afafaf', borderRadius: 30, height: 35, left: 299, position: 'absolute', top: 11, width: 34 },
-  group3: { height: 38, left: 8, top: 56, position: 'absolute', width: 326 },
-  rectangle6: { backgroundColor: '#afafaf', borderRadius: 8, height: 38, width: 326 },
+
+  // Each Meal Box (Breakfast/Lunch)
+  mealGroup: {
+    marginTop: 13,
+    width: '100%',
+    minHeight: 100,
+    position: 'relative', // Relative so children can stack
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+
+  // The grey background of the meal box
+  rectangle3: {
+    backgroundColor: '#bdbdbd',
+    borderRadius: 12,
+    ...StyleSheet.absoluteFillObject, // Stretches to fit the parent's dynamic height
+  },
+
+  textWrapper3: {
+    color: '#ffffff',
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: '700',
+    paddingLeft: 15,
+    paddingTop: 15,
+    zIndex: 2,
+  },
+
+  mealListContainer: {
+    padding: 10,
+    paddingTop: 5,
+    gap: 8, // Automatically spaces items so they don't touch
+  },
+
+  // The individual food row
+  itemRow: {
+    height: 38,
+    width: '100%',
+    justifyContent: 'center',
+  },
+
+  rectangle6: {
+    backgroundColor: '#afafaf',
+    borderRadius: 8,
+    ...StyleSheet.absoluteFillObject,
+  },
+
+  // Decorative circles from prototype
   rectangle7: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 10, top: 6, position: 'absolute', width: 25 },
   rectangle8: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 42, top: 6, position: 'absolute', width: 25 },
-  textWrapper: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 6, position: 'absolute', top: 6, width: 131 },
-  textWrapper2: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 124, position: 'absolute', top: 6, width: 131 },
+
+  // Bottom "accent" bar
+  rectangle4: {
+    backgroundColor: '#afafaf',
+    height: 8,
+    borderRadius: 30,
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+
+  textWrapper: { color: '#ffffff', fontSize: 12, left: 10, position: 'absolute' },
+  textWrapper2: { color: '#ffffff', fontSize: 12, right: 80, position: 'absolute' },
+  
+  emptyText: { color: '#ffffff', opacity: 0.5, textAlign: 'center', padding: 10 },
+  //meals end? or up 3 rows
+  
   group4: { backgroundColor: '#afafaf', borderRadius: 8, height: 38, left: 8, top: 100, position: 'absolute', width: 326 },
   rectangle9: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 10, top: 6, position: 'absolute', width: 25 },
   rectangle10: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 42, top: 6, position: 'absolute', width: 25 },
-  textWrapper3: { color: '#ffffff', fontFamily: 'Inter', fontSize: 16, left: 7, position: 'absolute', top: 17, width: 92 },
   meal2: { height: 66, left: '50%', transform: [{ translateX: -170 }], position: 'absolute', top: 219, width: 342 },
   rectangle11: { backgroundColor: '#bdbdbd', borderRadius: 12, height: 66, width: 340 },
   rectangle12: { backgroundColor: '#afafaf', borderRadius: 30, bottom: 8, height: 8, left: 8, position: 'absolute', width: 325 },
@@ -314,9 +393,29 @@ const styles = StyleSheet.create({
   rectangle13: { backgroundColor: '#afafaf', borderRadius: 30, height: 35, left: 299, position: 'absolute', top: 9, width: 34 },
   rectangle15: { backgroundColor: '#e74900', borderRadius: 30, height: 46, position: 'absolute', top: 50, width: 46, right: '10.5%' },
   rectangle16: { borderRadius: 30, height: 46, position: 'absolute', top: 50, width: 46, left: '8.86%' },
-  mainGroupContainer: { position: 'absolute', top: 199, width: '100%', alignItems: 'center' },
-  mainGroup: { height: 582, width: screenWidth - 24 }, // Ensure container fits within padding/margin
-  mainGroupBG: { alignItems: 'center', backgroundColor: variabless.VariableCollectionMedium, borderRadius: 16, height: 582, width: '100%' },
+  //main group border fixed
+  mainGroupContainer: { 
+  position: 'absolute', 
+  top: 199, 
+  width: '100%', 
+  alignItems: 'center'
+},
+
+mainGroup: { 
+  height: 582, 
+  width: '100%',
+},
+
+mainGroupBG: { 
+  alignItems: 'center', 
+  backgroundColor: variabless.VariableCollectionMedium, 
+  borderRadius: 16, 
+  height: 582, 
+  width: '100%',
+  borderWidth: 1,
+  borderColor: '#ffffff1f',
+  overflow: 'hidden' 
+},
   planRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingHorizontal: 16 },
   planText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 20, fontWeight: '700', marginTop: 20 },
   editText: { color: '#e74900', fontFamily: 'Lekton', fontSize: 16, textDecorationLine: 'underline', marginTop: 20 },
