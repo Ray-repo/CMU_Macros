@@ -11,6 +11,7 @@ import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing, interpo
 import Menuicon from "../../assets/images/Menu.svg";
 import Rightarrow from "../../assets/images/Chevron right.svg";
 import Leftarrow from "../../assets/images/Chevron left.svg";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { Dimensions } from 'react-native';
 import { useAuth } from '@/context/AuthContext';
@@ -156,61 +157,87 @@ export default function TabOneScreen() {
 
   const breakfast = meals.filter(m => m.meal_type === 'breakfast');
   const lunch = meals.filter(m => m.meal_type === 'lunch');
-  const snacks = meals.filter(m => m.meal_type === 'snack'); // Add this line!
+  const snacks = meals.filter(m => m.meal_type === 'snack'); 
+  const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
   return (
     <ScrollView> 
       <View style={styles.container}>
         <View style={styles.frame}>
-          <View style={styles.topbackground} />
+          <View style={styles.topbackground} >
+            <View style={styles.dateSelectorContainer}>
+              <TouchableOpacity style={styles.arrowButton}>
+                <Leftarrow />
+              </TouchableOpacity>
+              <Text style={styles.dateText}>{dateformat}</Text>
+              <TouchableOpacity style={styles.arrowButton}>
+                <Rightarrow />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.counter}>
+              {days.map((day, index) => {
+              // Example logic: Highlight the first two days (S, M) to match your HTML
+              const isHighlighted = index === 0; //|| index === 1 for monday
+              return (
+                <View key={index} style={styles.frame2}>
+                  <Text style={[styles.textBase, isHighlighted ? styles.highlightText : styles.defaultText]}>
+                    {day}
+                  </Text>
+                </View>
+                );
+              })}
+            </View>
+            <FontAwesome name="user" size={48} color = 'rgba(255, 255, 255, 0.4)' style={styles.tempbox2} />
+          </View>
 
           <View style={{ margin: 12, flex: 1, position: 'relative' }}>
             <View style={styles.rectangle} />
-            
-<View style={styles.mealsContainer}>
-  {/* BREAKFAST SECTION */}
-  <View style={styles.mealGroup}>
-    <View style={styles.rectangle3} />
-    <Text style={styles.textWrapper3}>Breakfast</Text>
-    
-    <View style={styles.mealListContainer}>
-      {breakfast.map((item, index) => (
-        <View key={item.id || index} style={styles.itemRow}>
-          <View style={styles.rectangle6} />
-          <View style={styles.rectangle7} />
-          <View style={styles.rectangle8} />
-          <Text style={styles.textWrapper}>{item.food_name}</Text>
-          <Text style={styles.textWrapper2}>{`${Math.round(item.calories)} kcal`}</Text>
-        </View>
-      ))}
-      {breakfast.length === 0 && <Text style={styles.emptyText}>No breakfast items</Text>}
-    </View>
-    {/*<View style={styles.rectangle4} />*/}
-  </View>
 
-  {/* LUNCH SECTION */}
-  <View style={styles.mealGroup}>
-    <View style={styles.rectangle3} />
-    <Text style={styles.textWrapper3}>Lunch</Text>
+
+            <View style={styles.mealsContainer}>
+              {/* BREAKFAST SECTION */}
+              <View style={styles.mealGroup}>
+                <View style={styles.rectangle3} />
+                <Text style={styles.textWrapper3}>Breakfast</Text>
     
-    <View style={styles.mealListContainer}>
-      {lunch.map((item, index) => (
-        <View key={item.id || index} style={styles.itemRow}>
-          <View style={styles.rectangle6} />
-          <View style={styles.rectangle7} />
-          <View style={styles.rectangle8} />
-          <Text style={styles.textWrapper}>{item.food_name}</Text>
-          <Text style={styles.textWrapper2}>{`${Math.round(item.calories)} kcal`}</Text>
-        </View>
-      ))}
-      {lunch.length === 0 && <Text style={styles.emptyText}>No lunch items</Text>}
-    </View>
-    {/*<View style={styles.rectangle4} />*/}
-  </View>
-</View>
-{/*meals end*/}            
+                <View style={styles.mealListContainer}>
+                  {breakfast.map((item, index) => (
+                  <View key={item.id || index} style={styles.itemRow}>
+                    <View style={styles.rectangle6} />
+                    <View style={styles.rectangle7} />
+                    <View style={styles.rectangle8} />
+                    <Text style={styles.textWrapper}>{item.food_name}</Text>
+                    <Text style={styles.textWrapper2}>{`${Math.round(item.calories)} kcal`}</Text>
+                  </View>
+                ))}
+                {breakfast.length === 0 && <Text style={styles.emptyText}>No breakfast items</Text>}
+                </View>
+                {/*<View style={styles.rectangle4} />*/}
+              </View>
+
+              {/* LUNCH SECTION */}
+              <View style={styles.mealGroup}>
+                <View style={styles.rectangle3} />
+                <Text style={styles.textWrapper3}>Lunch</Text>
+    
+                <View style={styles.mealListContainer}>
+                  {lunch.map((item, index) => (
+                  <View key={item.id || index} style={styles.itemRow}>
+                    <View style={styles.rectangle6} />
+                    <View style={styles.rectangle7} />
+                    <View style={styles.rectangle8} />
+                    <Text style={styles.textWrapper}>{item.food_name}</Text>
+                    <Text style={styles.textWrapper2}>{`${Math.round(item.calories)} kcal`}</Text>
+                  </View>
+                ))}
+                {lunch.length === 0 && <Text style={styles.emptyText}>No lunch items</Text>}
+                </View>
+                {/*<View style={styles.rectangle4} />*/}
+              </View>
+            </View>
+            {/*meals end*/}            
             
-            <View style={styles.rectangle15}/>
+
             <View style={styles.rectangle16}>
                 <Menuicon width={48} height={48} />
             </View>
@@ -271,12 +298,8 @@ export default function TabOneScreen() {
             </View>
 
             <Text style={styles.announcements}>Notifs/Announce</Text>
-            <Text style={styles.date}>{dateformat}</Text>
             <Text style={styles.amText}>7:00 am</Text>
             <Text style={styles.pmText}>7:00 pm</Text>
-
-            <View style={styles.rectangle23}><Rightarrow/></View>
-            <View style={styles.rectangle24}><Leftarrow/></View>
             
             <Image style={styles.group10} alt="Group" source={{ uri: "https://c.animaapp.com/JTUgphJD/img/group-11@2x.png" }} />
 
@@ -295,14 +318,7 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center'},
-  
-  frame: {
-    flex: 1,
-    backgroundColor: variabless.VariableCollectionMedium, 
-    minHeight: 1230, //og 1176
-    position: 'relative',
-    width: '100%',
-  },
+  frame: { flex: 1, backgroundColor: variabless.VariableCollectionMedium, minHeight: 1230, position: 'relative', width: '100%',},
   rectangle: {
     backgroundColor: variabless.VariableCollectionDark, 
     borderWidth: 1,
@@ -314,12 +330,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   topbackground: { backgroundColor: vars.dark, borderWidth: 1, borderColor: vars.cardstroke, height: 177, width: '100%', position: 'absolute', top: 0 },
-  meals: {
-    height: 360,    
-    position: 'absolute',
-    top: 791,
-    width: '100%',
-  },
+  meals: { height: 360, position: 'absolute', top: 791, width: '100%',},
   rectangle2: {
     backgroundColor: variabless.VariableCollectionMedium, 
     borderWidth: 1,
@@ -389,19 +400,17 @@ const styles = StyleSheet.create({
   rectangle12: { backgroundColor: '#afafaf', borderRadius: 30, bottom: 8, height: 8, left: 8, position: 'absolute', width: 325 },
   textWrapper4: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 6, position: 'absolute', top: 8, width: 250 },
   rectangle13: { backgroundColor: '#afafaf', borderRadius: 30, height: 35, left: 299, position: 'absolute', top: 9, width: 34 },
-rectangle15: {
-  backgroundColor: '#e74900', borderRadius: 30,
-  position: 'absolute',
-  top: 46,       // Adjust to sit nicely below the top of the screen
+  tempbox2: { position: 'absolute',
+  top: 59,       // Adjust to sit nicely below the top of the screen
   right: 0,     // Distance from the right edge
   zIndex: 10,    // Keeps it on top of background layers
-  height:55, width: 55,
+  height:60, width: 55,
 },
   rectangle16: {height: 44, width: 49, left: 2, top: 46, position: 'absolute' },
   //main group border fixed
   mainGroupContainer: { position: 'absolute', top: 250, width: '100%', alignItems: 'center'},
-mainGroup: { height: 582, width: '100%',},
-mainGroupBG: { alignItems: 'center', backgroundColor: variabless.VariableCollectionDark, borderRadius: 16, height: 582, width: '100%', borderWidth: 1,borderColor: '#ffffff1f',overflow: 'hidden' },
+  mainGroup: { height: 582, width: '100%',},
+  mainGroupBG: { alignItems: 'center', backgroundColor: variabless.VariableCollectionDark, borderRadius: 16, height: 582, width: '100%', borderWidth: 1,borderColor: '#ffffff1f',overflow: 'hidden' },
   planRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingHorizontal: 16 },
   planText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 20, fontWeight: '700', marginTop: 20 },
   editText: { color: '#e74900', fontFamily: 'Lekton', fontSize: 16, textDecorationLine: 'underline', marginTop: 20 },
@@ -414,46 +423,71 @@ mainGroupBG: { alignItems: 'center', backgroundColor: variabless.VariableCollect
   carbsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 183, opacity: 0.4, position: 'absolute', top: 259 },
   proteinsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 183, opacity: 0.4, position: 'absolute', top: 289 },
   fatsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 183, opacity: 0.4, position: 'absolute', top: 319 },
-nextMealGroup: {
-  height: 60,
-  position: 'relative',
-  width: 348,
-  marginTop: 60, // Add this to push it down away from the top of the group
-  }, 
+  nextMealGroup: { height: 60, position: 'relative', width: 348, marginTop: 60, }, 
   rectangle17: { backgroundColor: '#2d2d2d', borderRadius: 12, height: 60, width: '100%' },
   rectangle19: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 17, right: 40, position: 'absolute', top: 21, width: 50 },
   rectangle20: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 44, left: 10, position: 'absolute', top: 8, width: 223 },
   rectangle21: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 36, right: 10, position: 'absolute', top: 12, width: 14 },
   textWrapper11: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 24, position: 'absolute', top: 18, width: 199 },
-//end of next meal group boxes
-announcements: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -207 }], position: 'absolute', textAlign: 'center', top: 204, width: 416 },
-date: { 
-  color: '#ffffff', 
-  fontFamily: 'Inter', 
-  fontSize: 12, //14?
-  position: 'absolute', 
-  width: '100%', textAlign: 'center', top: 61,
-  /*
-  left: '50%', 
-  transform: [{ translateX: -113 }], 
-  textAlign: 'center', 
-  top: 36, // og 66
-  width: 226,
-  zIndex: 10, // Ensure it sits on top of everything else*/
-},  
+  //end of next meal group boxes
+  announcements: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -207 }], position: 'absolute', textAlign: 'center', top: 204, width: 416 },
+  date: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, position: 'absolute',  width: '100%', textAlign: 'center', top: 61,},  
   rectangle23: { height: 29, position: 'absolute', width: '100%', top: 57, left: '59.77%' }, //67
-  rectangle24: { height: 29, position: 'absolute', width: '100%', top: 57, left: '37.36%' }, //67
+  rectangle24: { height: 29, position: 'absolute', width: '100%', top: 57, left: '36.36%' }, //67
   amText: { color: '#ffffff', fontSize: 12, left: '11%', opacity: 0.4, position: 'absolute', top: 713 },
   pmText: { color: '#ffffff', fontSize: 12, left: '76.5%', opacity: 0.4, position: 'absolute', top: 713 },
-group10: { 
-  height: 28, 
-  position: 'absolute', 
-  top: 676, 
-  width: '90%',        // Make it 90% of the screen width
+group10: { height: 28, position: 'absolute', top: 676, width: '90%',        // Make it 90% of the screen width
   left: '5%',          // (100% - 90%) / 2 = 5% to center it
-},  kcalGroup: { flexDirection: 'column', height: 92, left: '50%', transform: [{ translateX: -78 }], position: 'absolute', top: 454, width: 160 }, 
+  },  
+  kcalGroup: { flexDirection: 'column', height: 92, left: '50%', transform: [{ translateX: -78 }], position: 'absolute', top: 454, width: 160 }, 
   kcalCurrent: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '700', textAlign: 'center', width: 154, height: 36, lineHeight: 36 },
   kcalDivider: { backgroundColor: '#ffffff', height: 2, marginLeft: 23, width: 109, marginVertical: 4 },
   kcalGoal: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '400', textAlign: 'center', width: 154, height: 36, lineHeight: 36 },
   kcalText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', textAlign: 'center', width: 154 },
+  //for day counter
+  counter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 0,
+    marginTop: 114,
+    paddingHorizontal: 10, // Added horizontal padding for spacing
+    position: 'relative',
+    width: '100%',
+  },
+  frame2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.12)', // #ffffff1f
+    borderWidth: 1,
+    borderColor: vars.cardstroke, // var(--cardstroke)
+    borderRadius: 100,
+    height: 48,
+    width: 48,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  textBase: {fontFamily: 'Lekton', fontSize: 16, textAlign: 'center',},
+  highlightText: {color: vars.highlight,},
+  defaultText: {color: '#ffffff', opacity: 0.8,},
+  dateSelectorContainer: {
+    position: 'absolute',
+    top: 61,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  dateText: {
+    color: '#ffffff',
+    fontFamily: 'Inter',
+    fontSize: 14, // Bumped to 14 for better readability
+    textAlign: 'center',
+    marginHorizontal: 20, // This creates the exact "certain amount" of space
+    minWidth: 100,        // Keeps the arrows from jumping if the date string length changes
+  },
+  arrowButton: {
+    height: 29,
+    width: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

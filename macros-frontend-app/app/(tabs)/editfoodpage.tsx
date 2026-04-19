@@ -159,10 +159,10 @@ export default function TabThreeScreen() {
         )}
 
         <TouchableOpacity style={styles.createboxes}>
-          <Text style={styles.createtext}>create food</Text>
+          <Text style={styles.createtext}>Create Food</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.createboxes}>
-          <Text style={styles.createtext}>create Recipe</Text>
+          <Text style={styles.createtext}>Create Recipe</Text>
         </TouchableOpacity>
       </ScrollView>
 
