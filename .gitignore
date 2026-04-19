@@ -1,4 +1,4 @@
 .expo/
 .vscode/
 .venv/
-CMU_Macros (Django)/macros/**/__pycache__/
+#CMU_Macros (Django)/macros/**/__pycache__/
