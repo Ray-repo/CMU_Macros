@@ -193,7 +193,7 @@ export default function TabOneScreen() {
               <View style={styles.mainGroup}>
                 <View style={styles.mainGroupBG}>
                   {/* invisible "edit" button it makes the planrow thing show but like lowkey needs to be fixed or like change it to logout button????*/}
-                  <TouchableOpacity style={{ position: 'absolute', top: 20, right: 16, zIndex: 10, opacity: 0}} onPress={() => router.push('/editfoodpage')}>
+                  <TouchableOpacity style={{ position: 'absolute', top: 20, right: 16, zIndex: 10, opacity: 0}}>
                     <Text style={{ color: '#ffffff', fontFamily: 'Lekton', fontSize: 16, textDecorationLine: 'underline', fontWeight: '700' }}>Edit</Text>
                   </TouchableOpacity>
                   <View style={styles.planRow}>
@@ -230,19 +230,11 @@ export default function TabOneScreen() {
                   </View>
                   
                   <View style={styles.nextMealGroup}>
-
                     <View style={styles.rectangle17} />
-
-                    <View style={styles.rectangle18} />
-
                     <View style={styles.rectangle19} />
-
                     <View style={styles.rectangle20} />
-
                     <View style={styles.rectangle21} />
-
                     <Text style={styles.textWrapper11}>Recommended next meal</Text>
-
                   </View>
 
                 </View>
@@ -274,10 +266,11 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center'},
+  
   frame: {
     flex: 1,
     backgroundColor: variabless.VariableCollectionDark, 
-    minHeight: 1176,
+    minHeight: 1156, //og 1176
     position: 'relative',
     width: '100%',
   },
@@ -288,14 +281,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     height: 59,
     position: 'absolute',
-    top: 131,
+    top: 101,
     width: '100%',
   },
   topbackground: {
     backgroundColor: variabless.VariableCollectionMedium, 
-    height: 126,
+    height: 96,
     position: 'absolute',
-    width: screenWidth,
+    width: '100%',
   },
   meals: {
     height: 360,    
@@ -314,7 +307,7 @@ const styles = StyleSheet.create({
     width: '100%',},
  // Main wrapper for all meals
   mealsContainer: {
-    marginTop: 791, // Keeps the whole section starting at the right place
+    marginTop: 761, // Keeps the whole section starting at the right place
     paddingHorizontal: 12,
     paddingBottom: 40,
     width: '100%',
@@ -341,39 +334,16 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject, // Stretches to fit the parent's dynamic height
   },
   //breakfast/lunch top text
-  textWrapper3: {
-    color: '#ffffff',
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: '700',
-    paddingLeft: 15,
-    paddingTop: 15,
-    zIndex: 2,
+  textWrapper3: {color: '#ffffff', fontFamily: 'Inter', fontSize: 16, fontWeight: '700', paddingLeft: 15, paddingTop: 15, zIndex: 2,},
+  mealListContainer: {padding: 10, paddingTop: 5, gap: 8, // Automatically spaces items so they don't touch 
   },
-
-  mealListContainer: {
-    padding: 10,
-    paddingTop: 5,
-    gap: 8, // Automatically spaces items so they don't touch
-  },
-
   // The individual food row
-  itemRow: {
-    height: 38,
-    width: '100%',
-    justifyContent: 'center',
-  },
-
-  rectangle6: {
-    backgroundColor: '#ffffff1f', //originally afafaf
-    borderRadius: 8,
-    ...StyleSheet.absoluteFillObject,
-  },
-
-  // Decorative circles from prototype
+  itemRow: {height: 38, width: '100%', justifyContent: 'center',},
+  rectangle6: {backgroundColor: '#ffffff1f', //originally afafaf 
+    borderRadius: 8, ...StyleSheet.absoluteFillObject,},
+  //Decorative circles from prototype
   rectangle7: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 10, top: 6, position: 'absolute', width: 25 },
   rectangle8: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 42, top: 6, position: 'absolute', width: 25 },
-
   // Bottom "accent" bar
   rectangle4: {
     backgroundColor: '#afafaf',
@@ -385,10 +355,8 @@ const styles = StyleSheet.create({
   //food name and kcal text
   textWrapper: { color: '#ffffff', fontSize: 12, left: 10, position: 'absolute' },
   textWrapper2: { color: '#ffffff', fontSize: 12, right: 80, position: 'absolute' },
-  
   emptyText: { color: '#ffffff', opacity: 0.5, textAlign: 'center', padding: 10 },
   //meals end? or up 3 rows
-  
   group4: { backgroundColor: '#afafaf', borderRadius: 8, height: 38, left: 8, top: 100, position: 'absolute', width: 326 },
   rectangle9: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 10, top: 6, position: 'absolute', width: 25 },
   rectangle10: { backgroundColor: '#bdbdbd', borderRadius: 30, height: 26, right: 42, top: 6, position: 'absolute', width: 25 },
@@ -397,40 +365,21 @@ const styles = StyleSheet.create({
   rectangle12: { backgroundColor: '#afafaf', borderRadius: 30, bottom: 8, height: 8, left: 8, position: 'absolute', width: 325 },
   textWrapper4: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 6, position: 'absolute', top: 8, width: 250 },
   rectangle13: { backgroundColor: '#afafaf', borderRadius: 30, height: 35, left: 299, position: 'absolute', top: 9, width: 34 },
-  rectangle15: { backgroundColor: '#e74900', borderRadius: 30, height: 46, position: 'absolute', top: 50, width: 46, right: '2.5%' },
-  rectangle16: { borderRadius: 30, height: 46, position: 'absolute', top: 50, width: 46, left: '2.5%' },
+  rectangle15: { backgroundColor: '#e74900', borderRadius: 30, height: 46, position: 'absolute', top: 20, width: 46, right: '2.5%' }, //og 50 top
+  rectangle16: { borderRadius: 30, height: 46, position: 'absolute', top: 20, width: 46, left: '2.5%' }, //og 50 top
   //main group border fixed
-  mainGroupContainer: { 
-  position: 'absolute', 
-  top: 199, 
-  width: '100%', 
-  alignItems: 'center'
-},
-
-mainGroup: { 
-  height: 582, 
-  width: '100%',
-},
-
-mainGroupBG: { 
-  alignItems: 'center', 
-  backgroundColor: variabless.VariableCollectionMedium, 
-  borderRadius: 16, 
-  height: 582, 
-  width: '100%',
-  borderWidth: 1,
-  borderColor: '#ffffff1f',
-  overflow: 'hidden' 
-},
+  mainGroupContainer: { position: 'absolute', top: 169, width: '100%', alignItems: 'center'},
+mainGroup: { height: 582, width: '100%',},
+mainGroupBG: { alignItems: 'center', backgroundColor: variabless.VariableCollectionMedium, borderRadius: 16, height: 582, width: '100%', borderWidth: 1,borderColor: '#ffffff1f',overflow: 'hidden' },
   planRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingHorizontal: 16 },
   planText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 20, fontWeight: '700', marginTop: 20 },
   editText: { color: '#e74900', fontFamily: 'Lekton', fontSize: 16, textDecorationLine: 'underline', marginTop: 20 },
   group8: { height: 346, marginTop: 22, marginBottom: 20, position: 'relative', width: 346 },
   kcalBackground: { backgroundColor: 'rgba(255, 255, 255, 0.12)', borderWidth: 2, borderColor: '#ffffff1f', borderRadius: 77, height: 154, left: 96, position: 'absolute', top: 96, width: 154, opacity: 0.15 }, // Dimmed background to match half-gauge aesthetic
   randomassdotontheright: { backgroundColor: '#5e89d8', borderRadius: 33, height: 66, left: 262, opacity: 0.5, position: 'absolute', top: 134, width: 66 },
-  carbsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 55 },
-  proteinsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 26 },
-  fatsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 0 },
+  carbsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 69 }, //67
+  proteinsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 39 },
+  fatsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 10 },
   carbsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 260 },
   proteinsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 290 },
   fatsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 320 },
@@ -438,14 +387,15 @@ nextMealGroup: {
   height: 60,
   position: 'relative',
   width: 348,
-  marginTop: 70, // Add this to push it down away from the top of the group
+  marginTop: 60, // Add this to push it down away from the top of the group
   }, 
   rectangle17: { backgroundColor: '#2d2d2d', borderRadius: 12, height: 60, width: '100%' },
   rectangle19: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 17, right: 40, position: 'absolute', top: 21, width: 50 },
   rectangle20: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 44, left: 10, position: 'absolute', top: 8, width: 223 },
   rectangle21: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 36, right: 10, position: 'absolute', top: 12, width: 14 },
   textWrapper11: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 24, position: 'absolute', top: 18, width: 199 },
-announcements: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -207 }], position: 'absolute', textAlign: 'center', top: 153, width: 416 },
+//end of next meal group boxes
+announcements: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -207 }], position: 'absolute', textAlign: 'center', top: 123, width: 416 },
 date: { 
   color: '#ffffff', 
   fontFamily: 'Inter', 
@@ -454,20 +404,21 @@ date: {
   transform: [{ translateX: -113 }], 
   position: 'absolute', 
   textAlign: 'center', 
-  top: 66, // Change this from '6%' to a fixed pixel value (e.g., 40 or 50)
+  top: 36, // og 66
   width: 226,
   zIndex: 10, // Ensure it sits on top of everything else
-},  rectangle23: { height: 29, position: 'absolute', top: 60, width: 20, left: '59.77%' },
-  rectangle24: { height: 29, position: 'absolute', top: 60, width: 20, left: '36.36%' },
-  amText: { color: '#ffffff', fontSize: 12, left: '11%', opacity: 0.4, position: 'absolute', top: 662 },
-  pmText: { color: '#ffffff', fontSize: 12, left: '76.5%', opacity: 0.4, position: 'absolute', top: 662 },
+},  
+  rectangle23: { height: 29, position: 'absolute', top: 30, width: 20, left: '59.77%' }, //og 60
+  rectangle24: { height: 29, position: 'absolute', top: 30, width: 20, left: '36.36%' }, //og 60
+  amText: { color: '#ffffff', fontSize: 12, left: '11%', opacity: 0.4, position: 'absolute', top: 632 },
+  pmText: { color: '#ffffff', fontSize: 12, left: '76.5%', opacity: 0.4, position: 'absolute', top: 632 },
 group10: { 
   height: 28, 
   position: 'absolute', 
-  top: 625, 
+  top: 595, 
   width: '90%',        // Make it 90% of the screen width
   left: '5%',          // (100% - 90%) / 2 = 5% to center it
-},  kcalGroup: { flexDirection: 'column', height: 92, left: '50%', transform: [{ translateX: -80 }], position: 'absolute', top: 385, width: 160 }, // Centering the kcal display
+},  kcalGroup: { flexDirection: 'column', height: 92, left: '50%', transform: [{ translateX: -80 }], position: 'absolute', top: 355, width: 160 }, // Centering the kcal display
   kcalCurrent: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '700', textAlign: 'center', width: 154, height: 36, lineHeight: 36 },
   kcalDivider: { backgroundColor: '#ffffff', height: 2, marginLeft: 23, width: 109, marginVertical: 4 },
   kcalGoal: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '400', textAlign: 'center', width: 154, height: 36, lineHeight: 36 },

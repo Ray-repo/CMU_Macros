@@ -1,4 +1,4 @@
-db.sqlite3
-macros/CMUMacros/__pycache__/
-macros/CMUMacros/migrations/__pycache__/
-macros/macros/__pycache__/
+#db.sqlite3
+#macros/CMUMacros/__pycache__/
+#macros/CMUMacros/migrations/__pycache__/
+#macros/macros/__pycache__/
