@@ -133,3 +133,14 @@ def user_goals(request):
         goals.fat = request.data.get('fat', goals.fat)
         goals.save()
         return Response({'message': 'Goals updated!'})
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def reset_daily_meals(request):
+    today = localtime(timezone.now()).date()
+    # Find today's logs for this user
+    logs = MealLog.objects.filter(user=request.user, date=today)
+    count = logs.count()
+    logs.delete() # Remove them from the database
+    
+    return Response({'message': f'Deleted {count} meals. Reset successful.'})

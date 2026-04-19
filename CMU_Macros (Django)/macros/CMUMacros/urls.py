@@ -10,4 +10,5 @@ urlpatterns = [
     path('meals/<int:log_id>/', views.delete_meal_log, name='delete_meal_log'),
     path('totals/', views.daily_totals, name='daily_totals'),
     path('goals/', views.user_goals, name='user_goals'),
+    path('reset/', views.reset_daily_meals),
 ]

@@ -7,6 +7,7 @@ import { useFocusEffect } from 'expo-router';
 import Svg, { Circle, Path } from 'react-native-svg';
 import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing, interpolate, DerivedValue } from 'react-native-reanimated';
 
+
 import Menuicon from "../../assets/images/Menu.svg";
 import Rightarrow from "../../assets/images/Chevron right.svg";
 import Leftarrow from "../../assets/images/Chevron left.svg";
@@ -22,6 +23,14 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 interface Totals { calories: number; protein: number; carbs: number; fat: number; }
 interface Goals { calories: number; protein: number; carbs: number; fat: number; }
 interface MealLog { id: number; food_name: string; meal_type: string; calories: number; protein: number; carbs: number; fat: number; }
+
+const vars = {
+  dark: 'rgba(24, 24, 24, 1)',
+  highlight: 'rgba(231, 73, 0, 1)',
+  medium: 'rgba(28, 31, 30, 1)',
+  cardstroke: 'rgba(255, 255, 255, 0.12)',
+  fontLekton: 'Lekton',
+};
 
 // Modifying MacroRing to display as a half-ellipse/arc on the left
 const MacroRing = ({ radius, color, progress, strokeWidth = 16, size = 346 }: {
@@ -97,6 +106,21 @@ export default function TabOneScreen() {
     month: 'short',
     day: 'numeric',
   });
+  const handleReset = async () => {
+    if (!token) return;
+      try {
+        const res = await fetch(`${API_URL}/reset/`, {
+        method: 'DELETE',
+        headers: { Authorization: `Token ${token}` },
+      });
+      if (res.ok) {
+        //alert("Daily logs cleared!");
+        fetchData(); // This refreshes your circles and totals to 0
+      }
+    } catch (e) {
+    console.error("Reset failed", e);
+    }
+  };
 
   const fetchData = async () => {
     if (!token) return;
@@ -204,6 +228,9 @@ export default function TabOneScreen() {
                       <TouchableOpacity onPress={() => router.push('/editfoodpage')}>
                         <Text style={styles.editText}>Edit</Text>
                       </TouchableOpacity>
+                      <TouchableOpacity onPress={handleReset}>
+                        <Text style={[styles.editText, {color: '#ff4444'}]}>Reset</Text>
+                      </TouchableOpacity>
                       <TouchableOpacity onPress={logout}>
                         <Text style={[styles.editText, { color: '#ff4444' }]}>Logout</Text>
                       </TouchableOpacity>
@@ -271,27 +298,22 @@ const styles = StyleSheet.create({
   
   frame: {
     flex: 1,
-    backgroundColor: variabless.VariableCollectionDark, 
-    minHeight: 1156, //og 1176
+    backgroundColor: variabless.VariableCollectionMedium, 
+    minHeight: 1230, //og 1176
     position: 'relative',
     width: '100%',
   },
   rectangle: {
-    backgroundColor: variabless.VariableCollectionMedium, 
+    backgroundColor: variabless.VariableCollectionDark, 
     borderWidth: 1,
     borderColor: '#ffffff1f',
     borderRadius: 16,
     height: 59,
     position: 'absolute',
-    top: 101,
+    top: 182,
     width: '100%',
   },
-  topbackground: {
-    backgroundColor: variabless.VariableCollectionMedium, 
-    height: 96,
-    position: 'absolute',
-    width: '100%',
-  },
+  topbackground: { backgroundColor: vars.dark, borderWidth: 1, borderColor: vars.cardstroke, height: 177, width: '100%', position: 'absolute', top: 0 },
   meals: {
     height: 360,    
     position: 'absolute',
@@ -309,11 +331,11 @@ const styles = StyleSheet.create({
     width: '100%',},
  // Main wrapper for all meals
   mealsContainer: {
-    marginTop: 761, // Keeps the whole section starting at the right place
+    marginTop: 842, // Keeps the whole section starting at the right place
     paddingHorizontal: 12,
     paddingBottom: 40,
     width: '100%',
-    backgroundColor: variabless.VariableCollectionMedium, // This replaces rectangle2
+    backgroundColor: variabless.VariableCollectionDark, // This replaces rectangle2
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#ffffff1f',
@@ -367,24 +389,31 @@ const styles = StyleSheet.create({
   rectangle12: { backgroundColor: '#afafaf', borderRadius: 30, bottom: 8, height: 8, left: 8, position: 'absolute', width: 325 },
   textWrapper4: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 6, position: 'absolute', top: 8, width: 250 },
   rectangle13: { backgroundColor: '#afafaf', borderRadius: 30, height: 35, left: 299, position: 'absolute', top: 9, width: 34 },
-  rectangle15: { backgroundColor: '#e74900', borderRadius: 30, height: 46, position: 'absolute', top: 20, width: 46, right: '2.5%' }, //og 50 top
-  rectangle16: { borderRadius: 30, height: 46, position: 'absolute', top: 20, width: 46, left: '2.5%' }, //og 50 top
+rectangle15: {
+  backgroundColor: '#e74900', borderRadius: 30,
+  position: 'absolute',
+  top: 46,       // Adjust to sit nicely below the top of the screen
+  right: 0,     // Distance from the right edge
+  zIndex: 10,    // Keeps it on top of background layers
+  height:55, width: 55,
+},
+  rectangle16: {height: 44, width: 49, left: 2, top: 46, position: 'absolute' },
   //main group border fixed
-  mainGroupContainer: { position: 'absolute', top: 169, width: '100%', alignItems: 'center'},
+  mainGroupContainer: { position: 'absolute', top: 250, width: '100%', alignItems: 'center'},
 mainGroup: { height: 582, width: '100%',},
-mainGroupBG: { alignItems: 'center', backgroundColor: variabless.VariableCollectionMedium, borderRadius: 16, height: 582, width: '100%', borderWidth: 1,borderColor: '#ffffff1f',overflow: 'hidden' },
+mainGroupBG: { alignItems: 'center', backgroundColor: variabless.VariableCollectionDark, borderRadius: 16, height: 582, width: '100%', borderWidth: 1,borderColor: '#ffffff1f',overflow: 'hidden' },
   planRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingHorizontal: 16 },
   planText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 20, fontWeight: '700', marginTop: 20 },
   editText: { color: '#e74900', fontFamily: 'Lekton', fontSize: 16, textDecorationLine: 'underline', marginTop: 20 },
   group8: { height: 346, marginTop: 22, marginBottom: 20, position: 'relative', width: 346 },
-  kcalBackground: { backgroundColor: 'rgba(255, 255, 255, 0.12)', borderWidth: 2, borderColor: '#ffffff1f', borderRadius: 77, height: 154, left: 96, position: 'absolute', top: 96, width: 154, opacity: 0.15 }, // Dimmed background to match half-gauge aesthetic
+  kcalBackground: { backgroundColor: 'rgba(255, 255, 255, 0.46)', borderWidth: 2, borderColor: '#ffffff1f', borderRadius: 77, height: 154, left: 96, position: 'absolute', top: 96, width: 154, opacity: 0.15 }, // Dimmed background to match half-gauge aesthetic
   randomassdotontheright: { backgroundColor: '#5e89d8', borderRadius: 33, height: 66, left: 262, opacity: 0.5, position: 'absolute', top: 134, width: 66 },
-  carbsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 69 }, //67
-  proteinsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 39 },
-  fatsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 181, position: 'absolute', top: 10 },
-  carbsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 260 },
-  proteinsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 290 },
-  fatsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 181, opacity: 0.4, position: 'absolute', top: 320 },
+  carbsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 183, position: 'absolute', top: 69 }, //67
+  proteinsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 183, position: 'absolute', top: 39 },
+  fatsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, fontWeight: '700', left: 183, position: 'absolute', top: 10 },
+  carbsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 183, opacity: 0.4, position: 'absolute', top: 259 },
+  proteinsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 183, opacity: 0.4, position: 'absolute', top: 289 },
+  fatsGramsText: { color: '#ffffff', fontFamily: 'Lekton', fontSize: 12, left: 183, opacity: 0.4, position: 'absolute', top: 319 },
 nextMealGroup: {
   height: 60,
   position: 'relative',
@@ -397,30 +426,32 @@ nextMealGroup: {
   rectangle21: { backgroundColor: variabless.VariableCollectionMedium, borderRadius: 12, height: 36, right: 10, position: 'absolute', top: 12, width: 14 },
   textWrapper11: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: 24, position: 'absolute', top: 18, width: 199 },
 //end of next meal group boxes
-announcements: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -207 }], position: 'absolute', textAlign: 'center', top: 123, width: 416 },
+announcements: { color: '#ffffff', fontFamily: 'Inter', fontSize: 12, left: '50%', transform: [{ translateX: -207 }], position: 'absolute', textAlign: 'center', top: 204, width: 416 },
 date: { 
   color: '#ffffff', 
   fontFamily: 'Inter', 
-  fontSize: 12, 
+  fontSize: 12, //14?
+  position: 'absolute', 
+  width: '100%', textAlign: 'center', top: 61,
+  /*
   left: '50%', 
   transform: [{ translateX: -113 }], 
-  position: 'absolute', 
   textAlign: 'center', 
   top: 36, // og 66
   width: 226,
-  zIndex: 10, // Ensure it sits on top of everything else
+  zIndex: 10, // Ensure it sits on top of everything else*/
 },  
-  rectangle23: { height: 29, position: 'absolute', top: 30, width: 20, left: '59.77%' }, //og 60
-  rectangle24: { height: 29, position: 'absolute', top: 30, width: 20, left: '36.36%' }, //og 60
-  amText: { color: '#ffffff', fontSize: 12, left: '11%', opacity: 0.4, position: 'absolute', top: 632 },
-  pmText: { color: '#ffffff', fontSize: 12, left: '76.5%', opacity: 0.4, position: 'absolute', top: 632 },
+  rectangle23: { height: 29, position: 'absolute', width: '100%', top: 57, left: '59.77%' }, //67
+  rectangle24: { height: 29, position: 'absolute', width: '100%', top: 57, left: '37.36%' }, //67
+  amText: { color: '#ffffff', fontSize: 12, left: '11%', opacity: 0.4, position: 'absolute', top: 713 },
+  pmText: { color: '#ffffff', fontSize: 12, left: '76.5%', opacity: 0.4, position: 'absolute', top: 713 },
 group10: { 
   height: 28, 
   position: 'absolute', 
-  top: 595, 
+  top: 676, 
   width: '90%',        // Make it 90% of the screen width
   left: '5%',          // (100% - 90%) / 2 = 5% to center it
-},  kcalGroup: { flexDirection: 'column', height: 92, left: '50%', transform: [{ translateX: -80 }], position: 'absolute', top: 355, width: 160 }, // Centering the kcal display
+},  kcalGroup: { flexDirection: 'column', height: 92, left: '50%', transform: [{ translateX: -78 }], position: 'absolute', top: 454, width: 160 }, 
   kcalCurrent: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '700', textAlign: 'center', width: 154, height: 36, lineHeight: 36 },
   kcalDivider: { backgroundColor: '#ffffff', height: 2, marginLeft: 23, width: 109, marginVertical: 4 },
   kcalGoal: { color: '#ffffff', fontFamily: 'Inter', fontSize: 36, fontWeight: '400', textAlign: 'center', width: 154, height: 36, lineHeight: 36 },

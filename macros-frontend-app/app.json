@@ -31,7 +31,15 @@
     },
     "plugins": [
       "expo-router",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+      "expo-font",
+        {
+        "fonts": [
+          "./assets/fonts/Lekton-Regular.ttf",
+        ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

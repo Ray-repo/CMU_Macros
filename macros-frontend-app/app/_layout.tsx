@@ -8,6 +8,9 @@ import React from 'react';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import * as Font from 'expo-font';
+
+
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -37,8 +40,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
+    'Lekton': require('../assets/fonts/Lekton-Regular.ttf'),
   });
 
   useEffect(() => {
@@ -48,8 +50,9 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) SplashScreen.hideAsync();
   }, [loaded]);
-
   if (!loaded) return null;
+
+  
 
   return (
     <AuthProvider>

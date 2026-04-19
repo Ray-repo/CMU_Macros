@@ -4,6 +4,10 @@ import Camera from "../../assets/images/Camera.svg";
 import Mic from "../../assets/images/Mic.svg";
 import X from "../../assets/images/X.svg";
 import { useAuth } from '@/context/AuthContext';
+import Menuicon from "../../assets/images/Menu.svg";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+
+
 
 const API_URL = 'http://127.0.0.1:8000/api/auth';
 
@@ -162,8 +166,15 @@ export default function TabThreeScreen() {
         </TouchableOpacity>
       </ScrollView>
 
-      <View style={styles.tempbox1} />
-      <View style={styles.tempbox2} />
+<FontAwesome 
+  name="user" 
+  size={48} 
+  color = 'rgba(255, 255, 255, 0.4)'
+  style={styles.tempbox2} 
+/>
+<View style={styles.menu}>
+                <Menuicon width={48} height={48} />
+      </View>
 
       <TouchableOpacity style={styles.cameraWrapper}>
         <Camera width={24} height={24} color={vars.dark} />
@@ -209,14 +220,20 @@ const styles = StyleSheet.create({
   underscrollbar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 10 },
   highlightedselection: { backgroundColor: vars.highlight, borderWidth: 1, borderColor: vars.cardstroke, borderRadius: 12, flexDirection: 'row', gap: 10, padding: 10, alignItems: 'center' },
   text: { color: '#ffffff', fontFamily: vars.fontLekton, fontSize: 14 },
-  whiterectangle: { backgroundColor: '#d9d9d9', height: 35, width: 39 },
+  whiterectangle: { height: 35, width: 39 }, //backgroundColor: '#d9d9d9', 
   macroHeaderRow: { flexDirection: 'row', alignItems: 'center', width: '100%', paddingHorizontal: 16, marginBottom: 8, gap: 18 },
   textWrapper8: { color: '#ffffff', fontFamily: vars.fontLekton, fontSize: 12, opacity: 0.4 },
   itemCondensedInstance: { width: '100%', paddingVertical: 10, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)' },
   createboxes: { backgroundColor: vars.dark, borderWidth: 1, borderColor: vars.cardstroke, borderRadius: 12, height: 48, paddingHorizontal: 14, justifyContent: 'center', marginBottom: 12, marginTop: 16 },
   createtext: { color: '#ffffff', fontFamily: vars.fontLekton, fontSize: 16 },
-  tempbox1: { backgroundColor: '#7c7c7c', height: 44, width: 49, left: 14, top: 58, position: 'absolute' },
-  tempbox2: { backgroundColor: '#7c7c7c', height: 44, width: 49, right: 12, top: 58, position: 'absolute' },
+  menu: {height: 44, width: 49, left: 14, top: 58, position: 'absolute' },
+  tempbox2: {
+  position: 'absolute',
+  top: 60,       // Adjust to sit nicely below the top of the screen
+  right: 0,     // Distance from the right edge
+  zIndex: 10,    // Keeps it on top of background layers
+  height:60, width: 55,
+},
   cameraWrapper: { backgroundColor: vars.highlight, borderWidth: 1, borderColor: vars.cardstroke, borderRadius: 100, height: 48, width: 48, justifyContent: 'center', alignItems: 'center', right: 13, top: 114, position: 'absolute' },
   textWrapper13: { color: '#ffffff', fontFamily: vars.fontLekton, fontSize: 14, width: '100%', textAlign: 'center', top: 69, position: 'absolute' },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'flex-end' },
