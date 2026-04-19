@@ -107,6 +107,7 @@ export default function TabOneScreen() {
         fetch(`${API_URL}/meals/`, { headers: { Authorization: `Token ${token}` } }),
       ]);
       const totalsData = await totalsRes.json();
+      console.log("Raw Totals from Backend:", totalsData);
       const goalsData = await goalsRes.json();
       const mealsData = await mealsRes.json();
       setTotals({
@@ -131,6 +132,7 @@ export default function TabOneScreen() {
 
   const breakfast = meals.filter(m => m.meal_type === 'breakfast');
   const lunch = meals.filter(m => m.meal_type === 'lunch');
+  const snacks = meals.filter(m => m.meal_type === 'snack'); // Add this line!
 
   return (
     <ScrollView> 

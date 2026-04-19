@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.utils.timezone import localtime
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
@@ -61,7 +62,7 @@ def food_list(request):
 @permission_classes([IsAuthenticated])
 def meal_log(request):
     if request.method == 'GET':
-        today = timezone.now().date()
+        today = localtime(timezone.now()).date()
         logs = MealLog.objects.filter(user=request.user, date=today)
         data = [{
             'id': log.id,
@@ -104,8 +105,8 @@ def delete_meal_log(request, log_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def daily_totals(request):
-    today = timezone.now().date()
-    logs = MealLog.objects.filter(user=request.user, date=today)
+    today = localtime(timezone.now()).date()
+    logs = MealLog.objects.filter(user=request.user, date = today)    
     totals = {
         'calories': sum(l.food_item.calories * l.quantity for l in logs),
         'fat': sum(l.food_item.fat * l.quantity for l in logs),
